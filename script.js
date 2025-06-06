@@ -117,31 +117,49 @@ function initializeDesktop() {
         const titleBar = windowElement.querySelector('.title-bar');
         if (!titleBar) return;
         let isDragging = false, offsetX, offsetY;
-        titleBar.addEventListener('mousedown', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
+
+        const startDrag = (e) => {
             isDragging = true;
-            offsetX = e.clientX - windowElement.offsetLeft;
-            offsetY = e.clientY - windowElement.offsetTop;
+            const clientX = e.clientX ?? e.touches[0].clientX;
+            const clientY = e.clientY ?? e.touches[0].clientY;
+            offsetX = clientX - windowElement.offsetLeft;
+            offsetY = clientY - windowElement.offsetTop;
             titleBar.style.cursor = 'grabbing';
             windowElement.style.transition = 'none';
             makeWindowActive(windowElement);
-        });
-        document.addEventListener('mousemove', (e) => {
+        };
+
+        const doDrag = (e) => {
             if (!isDragging) return;
-            let newX = e.clientX - offsetX, newY = e.clientY - offsetY;
+            e.preventDefault(); // Prevent page scrolling on touch
+            const clientX = e.clientX ?? e.touches[0].clientX;
+            const clientY = e.clientY ?? e.touches[0].clientY;
+            let newX = clientX - offsetX;
+            let newY = clientY - offsetY;
             const desktopRect = desktop.getBoundingClientRect();
             newX = Math.max(0, Math.min(newX, desktopRect.width - windowElement.offsetWidth));
             newY = Math.max(0, Math.min(newY, desktopRect.height - windowElement.offsetHeight));
             windowElement.style.left = newX + 'px';
             windowElement.style.top = newY + 'px';
-        });
-        document.addEventListener('mouseup', () => {
+        };
+
+        const stopDrag = () => {
             if (isDragging) {
                 isDragging = false;
                 titleBar.style.cursor = 'grab';
                 windowElement.style.transition = '';
             }
-        });
+        };
+
+        // Mouse Events
+        titleBar.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', doDrag);
+        document.addEventListener('mouseup', stopDrag);
+
+        // **** CHANGED: Added Touch Events ****
+        titleBar.addEventListener('touchstart', startDrag, { passive: false });
+        document.addEventListener('touchmove', doDrag, { passive: false });
+        document.addEventListener('touchend', stopDrag);
     }
     
     function minimizeWindow(windowElement) {
@@ -165,38 +183,68 @@ function initializeDesktop() {
     function makeResizable(windowElement) {
         const resizeHandle = windowElement.querySelector('.resize-handle');
         if (!resizeHandle) return;
+
         let isResizing = false;
         let startX, startY, startWidth, startHeight;
+
         const computedStyle = getComputedStyle(windowElement);
         const minWidth = parseInt(computedStyle.minWidth, 10) || 150;
         const minHeight = parseInt(computedStyle.minHeight, 10) || 100;
-        resizeHandle.addEventListener('mousedown', (e) => {
-            e.preventDefault(); e.stopPropagation(); 
+
+        const onResizeStart = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             isResizing = true;
-            startX = e.clientX; startY = e.clientY;
-            startWidth = windowElement.offsetWidth; startHeight = windowElement.offsetHeight;
-            windowElement.style.transition = 'none'; 
-            document.body.style.cursor = 'se-resize'; 
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-        });
-        function onMouseMove(e) {
+            
+            // Get starting coordinates from either mouse or touch event
+            startX = e.clientX ?? e.touches[0].clientX;
+            startY = e.clientY ?? e.touches[0].clientY;
+            
+            startWidth = windowElement.offsetWidth;
+            startHeight = windowElement.offsetHeight;
+            
+            windowElement.style.transition = 'none';
+            document.body.style.cursor = 'se-resize';
+            
+            document.addEventListener('mousemove', onResizeMove);
+            document.addEventListener('mouseup', onResizeEnd);
+            document.addEventListener('touchmove', onResizeMove, { passive: false });
+            document.addEventListener('touchend', onResizeEnd);
+        };
+
+        const onResizeMove = (e) => {
             if (!isResizing) return;
-            const dx = e.clientX - startX; const dy = e.clientY - startY;
-            let newWidth = startWidth + dx; let newHeight = startHeight + dy;
-            newWidth = Math.max(newWidth, minWidth); newHeight = Math.max(newHeight, minHeight);
+            
+            const clientX = e.clientX ?? e.touches[0].clientX;
+            const clientY = e.clientY ?? e.touches[0].clientY;
+
+            const dx = clientX - startX;
+            const dy = clientY - startY;
+            
+            let newWidth = startWidth + dx;
+            let newHeight = startHeight + dy;
+
+            newWidth = Math.max(newWidth, minWidth);
+            newHeight = Math.max(newHeight, minHeight);
+            
             windowElement.style.width = newWidth + 'px';
             windowElement.style.height = newHeight + 'px';
-        }
-        function onMouseUp() {
+        };
+
+        const onResizeEnd = () => {
             if (isResizing) {
                 isResizing = false;
-                windowElement.style.transition = ''; 
-                document.body.style.cursor = 'default'; 
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
+                document.body.style.cursor = 'default';
+                document.removeEventListener('mousemove', onResizeMove);
+                document.removeEventListener('mouseup', onResizeEnd);
+                document.removeEventListener('touchmove', onResizeMove);
+                document.removeEventListener('touchend', onResizeEnd);
             }
-        }
+        };
+        
+        // Listen for both mouse and touch events on the handle
+        resizeHandle.addEventListener('mousedown', onResizeStart);
+        resizeHandle.addEventListener('touchstart', onResizeStart, { passive: false });
     }
 
     function manageTaskbarButton(windowElement, title) {
@@ -271,8 +319,10 @@ function initializeDesktop() {
             windowElement.style.width = '640px'; 
             windowElement.style.height = '480px';
         } else if (contentType === 'custom-art-list') {
+            windowElement.classList.add('art-window');
             const container = document.createElement('div');
             container.className = 'file-list-container';
+
             const table = document.createElement('table');
             table.className = 'file-list-table';
             table.innerHTML = `<thead><tr><th>Name</th><th>Date Modified</th><th>Type</th><th>Size</th></tr></thead>`;
@@ -492,40 +542,13 @@ function initializeDesktop() {
     }
 
     // **** NEW: Special listener for the Luana_Moth.exe icon ****
-    const mothIcon = document.getElementById('icon-moth'); // Corrected ID
+    const mothIcon = document.getElementById('icon-moth'); 
     if (mothIcon) {
         mothIcon.addEventListener('dblclick', () => {
-            // This is the logic you wrote, to open the LMG website
-            const argWindow = openWindow(
-                'lmg-main-window', // A unique ID for this window
-                'Luana Moth Generator',        // The window title
-                'iframe',                    // The content type
-                '',                          // No direct content
-                'https://lichtung1.github.io/LMG/', // The URL
-                null, null
+            const mothWindow = openWindow(
+                'lmg-main-window', 'Luana Moth Generator', 'iframe', '', 'https://lichtung1.github.io/LMG/', null, null
             );
-
-            // Set a good size for the window
-            if (argWindow) {
-                argWindow.style.width = '800px'; 
-                argWindow.style.height = '600px';
-                argWindow.style.left = Math.max(0, (desktop.offsetWidth - 800) / 2) + 'px';
-                argWindow.style.top = Math.max(0, (desktop.offsetHeight - 600) / 2) + 'px';
-            }
-
-            // If you want an explainer for this one too, you would add a second openWindow call here
-            // just like the others, after adding its text to content.json.
-            const explainerWindow = openWindow('moth-explainer-window', null, null, null, null, 'mothExplainer', 'mothExplainer');
-            if (explainerWindow && artWindow) {
-                explainerWindow.style.width = '350px';
-                const leftPos = artWindow.offsetLeft + 40;
-                const topPos = artWindow.offsetTop + 40;
-                explainerWindow.style.left = leftPos + 'px';
-                explainerWindow.style.top = topPos + 'px';
-            }
         });
-
-        // Add the single-click listener to select it
         mothIcon.addEventListener('click', () => {
             document.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
             mothIcon.classList.add('selected');

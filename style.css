@@ -277,6 +277,23 @@ body {
     border: none;      /* Optional: removes the inner border for a seamless look */
 }
 
+.window.fullscreen {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 30px) !important; /* Full height minus the taskbar */
+    padding: 0 !important;
+    border-width: 0 !important;
+}
+
+.window.fullscreen .title-bar {
+    border-radius: 0; /* Optional: removes rounded corners if any */
+}
+
+.window.fullscreen .resize-handle {
+    display: none; /* Hide the resize handle on fullscreen windows */
+}
+
 /* Start Menu Styles */
 .start-menu {
     position: absolute;
@@ -503,14 +520,7 @@ li.project-item:hover .project-description {
 @media (max-width: 768px) {
 
     /* Force all windows to be smaller and positioned correctly */
-    .window {
-        width: 95vw !important;  /* Make window width 95% of the viewport width */
-        height: 85vh !important; /* Make window height 85% of the viewport height */
-        top: 10px !important;    /* Position it near the top */
-        left: 2.5vw !important;  /* Center it horizontally with a small margin */
-        
-        /* We use !important to override the inline styles set by JavaScript */
-    }
+
 
     /* Optional: On mobile, it can be tricky having two windows open at once.
        You might want to hide the smaller "explainer" window and only show the main ARG.
@@ -521,18 +531,36 @@ li.project-item:hover .project-description {
         display: none !important;
     }
     */
+    #lmg-main-window.window {
+        width: 100% !important;
+        height: calc(100% - 30px) !important; /* Full height minus the taskbar */
+        top: 0 !important;
+        left: 0 !important;
+    }
+    .window.art-window {
+        width: 95% !important;
+        height: 85% !important;
+        top: 10px !important;
+        left: 2.5% !important;
+        transform: translateZ(0); /* Fixes layering issues */
+    }
 
-    /* Ensure desktop icons arrange nicely on smaller screens */
+    /* 2. Makes viewers from the folder fullscreen, but EXCLUDES the initial profile photo */
+    .window.viewer-window:not(#photo-viewer-window) {
+        width: 100% !important;
+        height: calc(100% - 30px) !important; /* Full height minus the taskbar */
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+     /* The only rules that should remain are for general desktop tidiness */
     #desktop {
-        /* Allow icons to be closer together */
         gap: 10px;
-        /* Adjust padding for small screens */
-        padding-top: 10px;
-        padding-left: 10px;
+        padding: 10px;
     }
 
     .desktop-icon {
-        width: 65px; /* Slightly smaller icons */
+        width: 65px;
         margin-bottom: 15px;
     }
 }
