@@ -513,13 +513,77 @@ li.project-item:hover .project-description {
     top: 0 !important;
     left: 0 !important;
 }
+/* 1. The 'Programs' item itself. It's the positioning parent. */
+.start-menu li.has-flyout {
+    position: relative;
+}
+
+/* 2. The arrow on the 'Programs' item. */
+.flyout-arrow {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+}
+
+/* 3. The Fly-out Menu. Hidden by default. */
+.flyout-menu {
+    display: none;
+    position: absolute;
+    left: 127px; /* Start at the right edge of the 'Programs' button */
+    top: -2px;  /* Align with the top border of the 'Programs' button */
+    width: 180px;
+    background-color: #c0c0c0;
+    border: 1px outset #fff;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    padding: 1px;
+    list-style: none;
+    margin: 0;
+    z-index: 102; /* Make sure it appears on top */
+}
+
+/* 4. The hover trigger to show the menu. */
+@media (min-width: 769px) {
+    .start-menu li.has-flyout:hover > .flyout-menu {
+        display: block;
+    }
+}
+
+/* --- Mobile Tap Behavior (controlled by JavaScript) --- */
+.flyout-menu.visible {
+    display: block;
+}
+
+/* 5. The INVISIBLE BRIDGE to cover the gap. */
+/* I've added a pink background for debugging. If you see a pink bar, it's working! */
+.start-menu li.has-flyout::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 25px; /* A nice wide bridge */
+    height: 100%;
+}
+
+/* 6. Styles for the icons inside the new menu. */
+.flyout-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 /* =================================== */
 /* ====   Mobile Responsive Styles  ==== */
 /* =================================== */
 
 /* This targets any screen with a width of 768px or less (tablets and phones) */
 @media (max-width: 768px) {
-
+    .start-menu li.active-flyout-parent {
+        background-color: #000080;
+        color: white;
+    }
     /* Force all windows to be smaller and positioned correctly */
 
 

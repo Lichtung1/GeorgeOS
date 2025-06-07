@@ -53,8 +53,33 @@
             <strong>Windows</strong><span class="ninety-five">95</span>
         </div>
         <ul>
-            <li data-action="open-window" data-window-id="programs-window" data-window-title="Programs" data-content-type="text" data-content="Programs folder: Accessories, StartUp, MS-DOS Prompt..."><span>P</span>rograms</li>
-            <li data-action="open-window" data-window-id="documents-window" data-window-title="Documents" data-content-type="text" data-content="Recently opened documents would be listed here."><span>D</span>ocuments</li>
+            <li class="has-flyout">
+                <span>P</span>rograms <span class="flyout-arrow">&#9654;</span>
+                <ul class="flyout-menu">
+                    <li data-app="moth">
+                        <img src="images/moth.png" class="flyout-icon"> Luana_Moth.exe
+                    </li>
+                    <li data-app="mmos">
+                        <img src="images/MMOS.png" class="flyout-icon"> MMOS.exe
+                    </li>
+                    <li data-app="lichtung">
+                        <img src="images/job.png" class="flyout-icon"> text_dissolution.exe
+                    </li>
+                </ul>
+            </li>
+
+            <li class="has-flyout">
+                <span>D</span>ocuments <span class="flyout-arrow">&#9654;</span>
+                <ul class="flyout-menu">
+                    <li data-app="art-folder">
+                        <img src="images/folder.png" class="flyout-icon"> Art
+                    </li>
+                    <li data-app="operator-log">
+                        <img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG
+                    </li>
+                </ul>
+            </li>
+
             <li data-action="open-window" data-window-id="settings-window" data-window-title="Settings" data-content-type="text" data-content="Settings: Control Panel, Printers, Taskbar..."><span>S</span>ettings</li>
             <li data-action="open-window" data-window-id="find-window" data-window-title="Find" data-content-type="text" data-content="Find: Files or Folders..."><span>F</span>ind</li>
             <li class="separator"></li>
@@ -76,6 +101,6 @@
         </div>
         <div class="resize-handle"></div> </div>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
 </html>

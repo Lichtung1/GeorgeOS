@@ -87,12 +87,21 @@ function initializeDesktop() {
 
     startButton.addEventListener('click', (event) => {
         event.stopPropagation();
-        startMenu.style.display = startMenu.style.display === 'none' || startMenu.style.display === '' ? 'block' : 'none';
+        const isVisible = startMenu.style.display === 'block';
+        if (isVisible) {
+            // If it's visible, we are now hiding it
+            startMenu.style.display = 'none';
+            closeAllFlyouts(); // Call the cleanup function
+        } else {
+            // If it's hidden, we are now showing it
+            startMenu.style.display = 'block';
+        }
     });
 
     document.addEventListener('click', (event) => {
         if (desktop && !startMenu.contains(event.target) && event.target !== startButton) {
             startMenu.style.display = 'none';
+            closeAllFlyouts(); // Call the cleanup function
         }
     });
 
@@ -643,8 +652,15 @@ function initializeDesktop() {
 
     startMenu.querySelectorAll('li').forEach(item => {
         item.addEventListener('click', (e) => {
+            // If the clicked item is a parent for a flyout, just stop.
+            // Let the other dedicated listener handle it.
+            if (item.classList.contains('has-flyout')) {
+                return; 
+            }
+
             const action = item.dataset.action;
-            startMenu.style.display = 'none'; 
+            startMenu.style.display = 'none';
+            closeAllFlyouts();
             if (action === 'open-window') {
                 openWindow( 
                     item.dataset.windowId, item.dataset.windowTitle, item.dataset.contentType, 
@@ -673,7 +689,16 @@ function initializeDesktop() {
             }
         });
     });
-
+    function closeAllFlyouts() {
+        // Find and hide any visible flyout menus
+        document.querySelectorAll('.flyout-menu.visible').forEach(menu => {
+            menu.classList.remove('visible');
+        });
+        // Find and remove the highlight from their parent items
+        document.querySelectorAll('.active-flyout-parent').forEach(parent => {
+            parent.classList.remove('active-flyout-parent');
+        });
+    }
     function openWelcomeWindows() {
         // Define IDs and content keys for clarity
         const welcomeId = 'welcome-notepad';
@@ -761,6 +786,129 @@ function initializeDesktop() {
         img.onerror = () => { console.warn(`Could not load initial photo at: ${photoPath}`); };
     }
 
+    // --- START MENU FLY-OUT LOGIC ---
+    const flyoutParents = document.querySelectorAll('.start-menu .has-flyout');
+
+    flyoutParents.forEach(parent => {
+        parent.addEventListener('click', (event) => {
+            // 1. Stop the click from bubbling up and closing the entire start menu.
+            event.stopPropagation();
+
+            // 2. Find the direct child flyout menu of the item that was clicked.
+            const flyoutMenu = parent.querySelector('.flyout-menu');
+            if (!flyoutMenu) return;
+
+            // 3. Check if the clicked menu is already visible.
+            const isAlreadyVisible = flyoutMenu.classList.contains('visible');
+
+            // 4. Close any other flyout menus that might be open.
+            document.querySelectorAll('.flyout-menu.visible').forEach(openMenu => {
+                if (openMenu !== flyoutMenu) {
+                    openMenu.classList.remove('visible');
+                    // Also remove the active highlight from its parent
+                    openMenu.parentElement.classList.remove('active-flyout-parent');
+                }
+            });
+            
+            // 5. Toggle the visibility of the clicked menu and its parent's highlight.
+            if (isAlreadyVisible) {
+                flyoutMenu.classList.remove('visible');
+                parent.classList.remove('active-flyout-parent');
+            } else {
+                flyoutMenu.classList.add('visible');
+                parent.classList.add('active-flyout-parent');
+            }
+        });
+    });
+
+    let flyoutTimeout; // This will hold our "close menu" timer
+
+    flyoutParents.forEach(parent => {
+        const flyoutMenu = parent.querySelector('.flyout-menu');
+        if (!flyoutMenu) return;
+
+        const openMenu = () => {
+            // If a timer is running to close a menu, cancel it.
+            clearTimeout(flyoutTimeout);
+            
+            // Before showing the new menu, close any others that are open.
+            // This is the cleanup you were looking for!
+            closeAllFlyouts(); 
+
+            // Now, show the new menu.
+            parent.classList.add('active-flyout-parent');
+            flyoutMenu.classList.add('visible');
+        };
+
+        const closeMenu = () => {
+            // Start a short timer. If the mouse doesn't move onto the
+            // flyout menu within this time, we'll close everything.
+            flyoutTimeout = setTimeout(() => {
+                closeAllFlyouts();
+            }, 300); // 300 milliseconds
+        };
+
+        // Listen for the mouse entering "Programs" or "Documents"
+        parent.addEventListener('mouseenter', openMenu);
+        
+        // Listen for the mouse leaving "Programs" or "Documents"
+        parent.addEventListener('mouseleave', closeMenu);
+
+        // Listen for the mouse entering the flyout menu itself
+        flyoutMenu.addEventListener('mouseenter', () => {
+            // If the mouse successfully enters the flyout, cancel the timer that would have closed it.
+            clearTimeout(flyoutTimeout);
+        });
+
+        // Listen for the mouse leaving the flyout menu
+        flyoutMenu.addEventListener('mouseleave', closeMenu);
+    });
+    const flyoutItems = document.querySelectorAll('.flyout-menu li');
+
+    flyoutItems.forEach(item => {
+        // Check if the item is not a separator
+        if (item.classList.contains('separator')) {
+            return; // Skip separators
+        }
+
+        item.addEventListener('click', () => {
+            const appToLaunch = item.dataset.app;
+
+            // Find the corresponding desktop icon and trigger its double-click event
+            let iconToClick;
+            switch (appToLaunch) {
+                case 'moth':
+                    iconToClick = document.getElementById('icon-moth');
+                    break;
+                case 'mmos':
+                    iconToClick = document.getElementById('icon-mmos');
+                    break;
+                case 'lichtung':
+                    iconToClick = document.getElementById('icon-lichtung');
+                    break;
+                case 'art-folder':
+                    iconToClick = document.getElementById('icon-art-folder');
+                    break;
+                case 'operator-log':
+                    iconToClick = document.getElementById('icon-operator-log');
+                    break;
+            }
+
+            if (iconToClick) {
+                // Create and dispatch a 'dblclick' event
+                const dblClickEvent = new MouseEvent('dblclick', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                iconToClick.dispatchEvent(dblClickEvent);
+            }
+
+            // Hide the start menu after clicking
+            startMenu.style.display = 'none';
+            closeAllFlyouts();
+        });
+    }); 
     // Call the function to open welcome windows at the end of initialization
     openWelcomeWindows(); 
 
