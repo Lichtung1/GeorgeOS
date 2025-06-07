@@ -516,8 +516,90 @@ function initializeDesktop() {
         return windowElement;
     }
 
-     // --- ICON EVENT LISTENERS ---
+    function promptForPassword(title) {
+        const dialogId = "password-prompt-dialog";
 
+        return new Promise((resolve) => {
+            // Prevent multiple dialogs
+            let existingDialog = document.getElementById(dialogId);
+            if (existingDialog) {
+                makeWindowActive(existingDialog);
+                return; // Do nothing if a dialog is already open
+            }
+
+            const contentElement = document.createElement('div');
+            // This layout now uses a table for precise alignment like in classic Windows dialogs
+            contentElement.innerHTML = `
+                <div style="display: flex; align-items: flex-start; padding: 2.5px;">
+                    <img src="images/key_icon.png" alt="Key" style="width: 32px; height: 32px; margin-right: 10px;">
+                    <div style="display: flex; flex-direction: column;">
+                        <p style="text-align: left; margin-top: 0; margin-bottom: 5px;">This program is password protected.</p>
+                        <p style="text-align: left; margin-top: 0; margin-bottom: 10px;">Please enter the password:</p>
+                        <input type="password" id="password-input-field" class="win95-input" style="width: 250px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: center; gap: 6px;">
+                            <button class="win95-button" id="password-ok-btn" style="min-width: 75px;">OK</button>
+                            <button class="win95-button" id="password-cancel-btn" style="min-width: 75px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const passwordDialog = openWindow(dialogId, title, "custom", contentElement, "", null, null);
+
+            if (passwordDialog) {
+                // Adjust window size for the new layout
+                passwordDialog.style.width = 'auto';
+                passwordDialog.style.height = 'auto';
+
+                // --- ALL THE LOGIC BELOW REMAINS THE SAME ---
+
+                const passwordInput = passwordDialog.querySelector('#password-input-field');
+                const okBtn = passwordDialog.querySelector('#password-ok-btn');
+                const cancelBtn = passwordDialog.querySelector('#password-cancel-btn');
+                const closeButton = passwordDialog.querySelector('.close-button');
+
+                let wasResolved = false;
+
+                const resolveAndClose = (value) => {
+                    if (wasResolved) return;
+                    wasResolved = true;
+                    observer.disconnect();
+                    if (document.body.contains(passwordDialog)) {
+                       closeButton.click();
+                    }
+                    resolve(value);
+                };
+
+                okBtn.onclick = () => resolveAndClose(passwordInput.value);
+                cancelBtn.onclick = () => resolveAndClose(null);
+                
+                passwordInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') { e.preventDefault(); okBtn.click(); }
+                    if (e.key === 'Escape') { cancelBtn.click(); }
+                });
+
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        mutation.removedNodes.forEach((removedNode) => {
+                            if (removedNode === passwordDialog && !wasResolved) {
+                                wasResolved = true;
+                                observer.disconnect();
+                                resolve(null);
+                            }
+                        });
+                    });
+                });
+                
+                observer.observe(desktop, { childList: true });
+                
+                passwordInput.focus();
+            } else {
+                resolve(null);
+            }
+        });
+    }
+
+    // --- ICON EVENT LISTENERS ---
     // Generic listener for all icons that DON'T have special behaviors
     document.querySelectorAll('.desktop-icon:not(#icon-mmos):not(#icon-lichtung):not(#icon-moth)').forEach(icon => {
         icon.addEventListener('dblclick', () => {
@@ -611,29 +693,30 @@ function initializeDesktop() {
 
     const mothIcon = document.getElementById('icon-moth'); 
     if (mothIcon) {
-        mothIcon.addEventListener('dblclick', () => {
-            // First, open the main game window
-            const mothWindow = openWindow(
-                'lmg-main-window', 
-                'Luana Moth Generator', 
-                'iframe', 
-                '', 
-                'https://lichtung1.github.io/LMG/', 
-                null, 
-                null
-            );
+        mothIcon.addEventListener('dblclick', async () => {
+            const correctPassword = "metroxylon";
 
-            // NOW, also open the explainer window using the data from your JSON
-            const explainerWindow = openWindow(
-                'moth-explainer-window', // A unique ID for this window
-                null,
-                null,
-                null,
-                null,
-                'mothExplainer',      // The key from your content.json for the text
-                'mothExplainer',      // The key for the title
-                'explainer-window'    // The special class for our mobile styling
-            );
+            const enteredPassword = await promptForPassword("Password Required");
+
+            if (enteredPassword === correctPassword) {
+                // Password is correct, open the windows
+                openWindow(
+                    'lmg-main-window', 
+                    'Luana Moth Generator', 
+                    'iframe', '', 
+                    'https://lichtung1.github.io/LMG/', 
+                    null, null
+                );
+                openWindow(
+                    'moth-explainer-window',
+                    null, null, null, null,
+                    'mothExplainer', 'mothExplainer', 'explainer-window'
+                );
+            } else if (enteredPassword !== null) {
+                // User entered a password, but it was incorrect
+                alert("Incorrect password.");
+            }
+            // If enteredPassword is null, the user canceled, so do nothing.
         });
         mothIcon.addEventListener('click', () => {
             document.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));

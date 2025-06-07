@@ -574,6 +574,70 @@ li.project-item:hover .project-description {
     vertical-align: middle;
 }
 
+.win95-button {
+    background-color: #c0c0c0;
+    border-width: 1px;
+    border-style: outset;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 3px 12px;
+    cursor: pointer;
+    min-width: 70px;
+    margin: 0 5px;
+}
+
+.win95-button:active {
+    border-style: inset;
+    padding: 4px 11px 2px 13px;
+}
+
+.win95-input {
+    border: 1px solid #808080;
+    border-style: inset;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background-color: white;
+    padding: 3px;
+    font-family: "MS Sans Serif", sans-serif;
+    width: calc(100% - 10px);
+    box-sizing: border-box;
+}
+
+
+/* ---- Consolidated styles for the Password Prompt Dialog ---- */
+
+/* This single rule styles the main content area of the dialog */
+#password-prompt-dialog .window-body {
+    background-color: #c0c0c0; /* Final gray background color */
+    font-family: "MS Sans Serif", sans-serif;
+    font-size: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Styles paragraphs inside the dialog */
+#password-prompt-dialog .window-body p {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* This single rule styles the input field specifically inside the dialog */
+#password-prompt-dialog .window-body .win95-input {
+    margin-bottom: 15px;
+    background-color: #ffffff; /* Ensures the input field stays white */
+}
+
+/* Styles the container for the OK/Cancel buttons */
+#password-prompt-dialog .window-body > div {
+    display: flex;
+    gap: 10px;
+}
+
+/* Hides the resize handle on the dialog */
+#password-prompt-dialog .resize-handle {
+    display: none;
+}
+
 /* =================================== */
 /* ====   Mobile Responsive Styles  ==== */
 /* =================================== */
@@ -629,3 +693,4 @@ li.project-item:hover .project-description {
         margin-bottom: 15px;
     }
 }
+
