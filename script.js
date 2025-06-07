@@ -1,5 +1,17 @@
 let siteContent = {}; // Global variable to store fetched JSON data
 
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Function to fetch content from JSON file
 async function fetchContent() {
     try {
@@ -273,7 +285,7 @@ function initializeDesktop() {
         updateTaskbarButtonStates(windowId); 
     }
 
-    function openWindow(id, htmlTitleFallback, contentType, directContent, contentUrl, contentKey, windowTitleKey) {
+    function openWindow(id, htmlTitleFallback, contentType, directContent, contentUrl, contentKey, windowTitleKey, extraClass = null) {
         let windowElement = document.getElementById(id);
         if (windowElement) { 
             if (windowElement.classList.contains('minimized')) restoreWindow(windowElement);
@@ -284,6 +296,7 @@ function initializeDesktop() {
         windowElement = windowTemplate.cloneNode(true);
         if (!windowElement) { console.error("Failed to clone window template!"); return null; }
         windowElement.id = id;
+        if (extraClass) windowElement.classList.add(extraClass);
         windowElement.style.display = 'none'; 
         
         let finalTitle = htmlTitleFallback || 'Window';
@@ -471,6 +484,26 @@ function initializeDesktop() {
         windowElement.style.display = 'flex';
         manageTaskbarButton(windowElement, finalTitle); 
         makeWindowActive(windowElement); 
+
+        const desktopWidth = desktop.offsetWidth;
+        const isMobile = desktopWidth <= 768;
+
+        if (isMobile) {
+            // Check if the window has our new 'explainer-window' class
+            if (windowElement.classList.contains('explainer-window')) {
+                // --- SPECIAL rules for ALL explainer windows on mobile ---
+                windowElement.style.width = '80%';
+                windowElement.style.height = '35%';
+                windowElement.style.left = '10%';
+                windowElement.style.top = '15%';
+
+            } else {
+                windowElement.style.width = '90%';   // 90% of screen width
+                windowElement.style.height = '90%';  // 85% of screen height
+                windowElement.style.left = '5%';     // 5% from the left
+                windowElement.style.top = '5%';      // 5% from the top
+            }
+        }
         return windowElement;
     }
 
@@ -495,19 +528,34 @@ function initializeDesktop() {
     const mmosIcon = document.getElementById('icon-mmos');
     if (mmosIcon) {
         mmosIcon.addEventListener('dblclick', () => {
+            // This logic now runs on BOTH mobile and desktop.
+            
+            // --- Open the windows ---
             const argWindow = openWindow('moyamoya-arg-main-window', 'MOYAMOYA OS', 'iframe', '', 'https://moyamoya.ca', null, null);
-            if (argWindow) {
-                argWindow.style.width = '800px'; argWindow.style.height = '600px';
-                argWindow.style.left = Math.max(0, (desktop.offsetWidth - 800) / 2) + 'px';
-                argWindow.style.top = Math.max(0, (desktop.offsetHeight - 600) / 2) + 'px';
+            const explainerWindow = openWindow('moyamoya-explainer-window', null, null, null, null, 'moyamoyaLauncher', 'moyamoyaLauncher', 'explainer-window');
+            if (explainerWindow) { 
+                explainerWindow.classList.add('explainer-window');
             }
-            const explainerWindow = openWindow('moyamoya-explainer-window', null, null, null, null, 'moyamoyaLauncher', 'moyamoyaLauncher');
-            if (explainerWindow && argWindow) {
-                explainerWindow.style.width = '450px';
-                const leftPos = argWindow.offsetLeft + 40;
-                const topPos = argWindow.offsetTop + 40;
-                explainerWindow.style.left = leftPos + 'px';
-                explainerWindow.style.top = topPos + 'px';
+
+            // --- Size and position them for DESKTOP ONLY ---
+            const isMobile = desktop.offsetWidth <= 768;
+            if (!isMobile) {
+                if (argWindow) {
+                    argWindow.style.width = '800px';
+                    argWindow.style.height = '600px';
+                    argWindow.style.left = Math.max(0, (desktop.offsetWidth - 800) / 2) + 'px';
+                    argWindow.style.top = Math.max(0, (desktop.offsetHeight - 600) / 2) + 'px';
+                }
+                if (explainerWindow && argWindow) {
+                    explainerWindow.style.width = '450px';
+                    // This timeout ensures the argWindow has a position before we calculate from it
+                    setTimeout(() => {
+                        const leftPos = argWindow.offsetLeft + 40;
+                        const topPos = argWindow.offsetTop + 40;
+                        explainerWindow.style.left = leftPos + 'px';
+                        explainerWindow.style.top = topPos + 'px';
+                    }, 0);
+                }
             }
         });
         mmosIcon.addEventListener('click', () => {
@@ -520,20 +568,31 @@ function initializeDesktop() {
     const lichtungIcon = document.getElementById('icon-lichtung');
     if (lichtungIcon) {
         lichtungIcon.addEventListener('dblclick', () => {
+            // --- Open both windows first ---
             const artWindow = openWindow('lichtung-art-main-window', 'Where I Cannot Find Him', 'iframe', '', 'https://lichtung1.github.io/Where-I-Cannot-Find-Him-V2/', null, null);
-            if (artWindow) {
-                artWindow.style.width = '700px'; artWindow.style.height = '500px';
-                artWindow.style.left = Math.max(0, (desktop.offsetWidth - 700) / 2) + 'px';
-                artWindow.style.top = Math.max(0, (desktop.offsetHeight - 500) / 2) + 'px';
+            const explainerWindow = openWindow('lichtung-explainer-window', null, null, null, null, 'lichtungExplainer', 'lichtungExplainer', 'explainer-window');
+
+            // --- Size and position them for DESKTOP ONLY ---
+            const isMobile = desktop.offsetWidth <= 768;
+            if (!isMobile) {
+                if (artWindow) {
+                    artWindow.style.width = '700px';
+                    artWindow.style.height = '500px';
+                    artWindow.style.left = Math.max(0, (desktop.offsetWidth - 700) / 2) + 'px';
+                    artWindow.style.top = Math.max(0, (desktop.offsetHeight - 500) / 2) + 'px';
+                }
+                if (explainerWindow && artWindow) {
+                    explainerWindow.style.width = '350px';
+                    // This timeout ensures the artWindow has a position before we calculate from it
+                    setTimeout(() => {
+                        const leftPos = artWindow.offsetLeft + 40;
+                        const topPos = artWindow.offsetTop + 40;
+                        explainerWindow.style.left = leftPos + 'px';
+                        explainerWindow.style.top = topPos + 'px';
+                    }, 0);
+                }
             }
-            const explainerWindow = openWindow('lichtung-explainer-window', null, null, null, null, 'lichtungExplainer', 'lichtungExplainer');
-            if (explainerWindow && artWindow) {
-                explainerWindow.style.width = '350px';
-                const leftPos = artWindow.offsetLeft + 40;
-                const topPos = artWindow.offsetTop + 40;
-                explainerWindow.style.left = leftPos + 'px';
-                explainerWindow.style.top = topPos + 'px';
-            }
+            // On mobile, our general rules in openWindow() will handle the layout automatically.
         });
         lichtungIcon.addEventListener('click', () => {
             document.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
@@ -541,12 +600,30 @@ function initializeDesktop() {
         });
     }
 
-    // **** NEW: Special listener for the Luana_Moth.exe icon ****
     const mothIcon = document.getElementById('icon-moth'); 
     if (mothIcon) {
         mothIcon.addEventListener('dblclick', () => {
+            // First, open the main game window
             const mothWindow = openWindow(
-                'lmg-main-window', 'Luana Moth Generator', 'iframe', '', 'https://lichtung1.github.io/LMG/', null, null
+                'lmg-main-window', 
+                'Luana Moth Generator', 
+                'iframe', 
+                '', 
+                'https://lichtung1.github.io/LMG/', 
+                null, 
+                null
+            );
+
+            // NOW, also open the explainer window using the data from your JSON
+            const explainerWindow = openWindow(
+                'moth-explainer-window', // A unique ID for this window
+                null,
+                null,
+                null,
+                null,
+                'mothExplainer',      // The key from your content.json for the text
+                'mothExplainer',      // The key for the title
+                'explainer-window'    // The special class for our mobile styling
             );
         });
         mothIcon.addEventListener('click', () => {
@@ -608,21 +685,33 @@ function initializeDesktop() {
         // 1. Open the Welcome Notepad
         let welcomeWindow = null;
         if (siteContent[welcomeContentKey]) {
+            // We're changing how this window is called to make it a text window
             welcomeWindow = openWindow(
                 welcomeId,
-                siteContent[welcomeContentKey].title,
-                'textarea',
-                siteContent[welcomeContentKey].text,
-                null, null, null
+                null, // Can be null now
+                'text', // Change 'textarea' to 'text'
+                null, // Can be null now
+                null,
+                welcomeContentKey, // Pass the content key here
+                welcomeContentKey  // Pass the title key here
             );
             if (welcomeWindow) {
-                const welcomeWidth = 400; // The width we are setting
-                welcomeWindow.style.width = welcomeWidth + 'px';
+                const desiredWidth = 400; // The width we want on desktop
+                const desktopWidth = desktop.offsetWidth;
+                
+                // Check if the desired width is wider than the screen
+                let finalWidth = desiredWidth;
+                if (desiredWidth > desktopWidth) {
+                    finalWidth = desktopWidth * 0.95; // If so, set the width to 95% of the screen
+                }
+
+                // Apply the final calculated width
+                welcomeWindow.style.width = finalWidth + 'px';
                 welcomeWindow.style.height = '250px';
 
-                // **** CHANGED: Logic to center the window horizontally ****
-                const welcomeLeft = (desktop.offsetWidth - welcomeWidth) / 2;
-                welcomeWindow.style.left = Math.max(10, welcomeLeft) + 'px'; // Center it, but with a minimum 10px margin
+                // Center the window based on its new final width
+                const welcomeLeft = (desktopWidth - finalWidth) / 2;
+                welcomeWindow.style.left = Math.max(10, welcomeLeft) + 'px';
                 welcomeWindow.style.top = '50px';
             }
         }
@@ -674,6 +763,37 @@ function initializeDesktop() {
 
     // Call the function to open welcome windows at the end of initialization
     openWelcomeWindows(); 
+
+
+    const handleResize = debounce(() => {
+        const isMobile = desktop.offsetWidth <= 768;
+
+        if (isMobile) {
+            for (const windowId in openWindows) {
+                const windowData = openWindows[windowId];
+                if (windowData && windowData.element && !windowData.element.classList.contains('minimized')) {
+                    const windowElement = windowData.element;
+
+                    if (windowElement.classList.contains('explainer-window')) {
+                        // Apply special styles for explainer windows
+                        windowElement.style.width = '80%';
+                        windowElement.style.height = '35%';
+                        windowElement.style.left = '10%';
+                        windowElement.style.top = '15%';
+                    } else {
+                        // Apply general styles for all other windows using percentages
+                        windowElement.style.width = '100%';
+                        windowElement.style.height = '100%';
+                        windowElement.style.left = '0%';
+                        windowElement.style.top = '0%';
+                    }
+                }
+            }
+        }
+    }, 150);
+
+    // Listen for any window resize or orientation change
+    window.addEventListener('resize', handleResize);
 } // End of initializeDesktop
 
 // Start everything after fetching content

@@ -207,9 +207,8 @@ body {
     height: 14px;
     padding: 0;
     margin-left: 2px;
-    font-family: "Marlett", "MS Sans Serif";
-    font-size: 10px;
-    font-weight: normal;
+    font-size: 12px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -220,10 +219,6 @@ body {
     border-style: inset;
     padding-left: 1px;
     padding-top: 1px;
-}
-.title-bar-controls button::before { 
-    content: attr(data-symbol);
-    font-family: "Marlett";
 }
 
 .resize-handle {
@@ -273,8 +268,9 @@ body {
 
 .window-body.iframe-container {
     padding: 0;        /* Remove the padding */
-    overflow: hidden;  /* Explicitly hide scrollbars on the container */
+    overflow: hidden; 
     border: none;      /* Optional: removes the inner border for a seamless look */
+    
 }
 
 .window.fullscreen {
@@ -511,7 +507,12 @@ li.project-item:hover .project-description {
     margin-top: 0;
     margin-bottom: 10px;
 }
-
+#lmg-main-window.window {
+    width: 100% !important;
+    height: calc(100%) !important; /* Full height minus the taskbar */
+    top: 0 !important;
+    left: 0 !important;
+}
 /* =================================== */
 /* ====   Mobile Responsive Styles  ==== */
 /* =================================== */
@@ -533,7 +534,7 @@ li.project-item:hover .project-description {
     */
     #lmg-main-window.window {
         width: 100% !important;
-        height: calc(100% - 30px) !important; /* Full height minus the taskbar */
+        height: calc(100%) !important; /* Full height minus the taskbar */
         top: 0 !important;
         left: 0 !important;
     }
@@ -548,7 +549,7 @@ li.project-item:hover .project-description {
     /* 2. Makes viewers from the folder fullscreen, but EXCLUDES the initial profile photo */
     .window.viewer-window:not(#photo-viewer-window) {
         width: 100% !important;
-        height: calc(100% - 30px) !important; /* Full height minus the taskbar */
+        height: calc(100% - 30px) !important; 
         top: 0 !important;
         left: 0 !important;
     }
