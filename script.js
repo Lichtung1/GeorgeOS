@@ -787,94 +787,73 @@ function initializeDesktop() {
     }
 
     // --- START MENU FLY-OUT LOGIC ---
+    let flyoutTimeout; 
     const flyoutParents = document.querySelectorAll('.start-menu .has-flyout');
 
-    flyoutParents.forEach(parent => {
-        parent.addEventListener('click', (event) => {
-            // 1. Stop the click from bubbling up and closing the entire start menu.
-            event.stopPropagation();
-
-            // 2. Find the direct child flyout menu of the item that was clicked.
-            const flyoutMenu = parent.querySelector('.flyout-menu');
-            if (!flyoutMenu) return;
-
-            // 3. Check if the clicked menu is already visible.
-            const isAlreadyVisible = flyoutMenu.classList.contains('visible');
-
-            // 4. Close any other flyout menus that might be open.
-            document.querySelectorAll('.flyout-menu.visible').forEach(openMenu => {
-                if (openMenu !== flyoutMenu) {
-                    openMenu.classList.remove('visible');
-                    // Also remove the active highlight from its parent
-                    openMenu.parentElement.classList.remove('active-flyout-parent');
-                }
-            });
-            
-            // 5. Toggle the visibility of the clicked menu and its parent's highlight.
-            if (isAlreadyVisible) {
-                flyoutMenu.classList.remove('visible');
-                parent.classList.remove('active-flyout-parent');
-            } else {
-                flyoutMenu.classList.add('visible');
-                parent.classList.add('active-flyout-parent');
-            }
-        });
-    });
-
-    let flyoutTimeout; // This will hold our "close menu" timer
-
+    // A single loop to handle all flyout logic
     flyoutParents.forEach(parent => {
         const flyoutMenu = parent.querySelector('.flyout-menu');
         if (!flyoutMenu) return;
 
-        const openMenu = () => {
-            // If a timer is running to close a menu, cancel it.
-            clearTimeout(flyoutTimeout);
-            
-            // Before showing the new menu, close any others that are open.
-            // This is the cleanup you were looking for!
-            closeAllFlyouts(); 
+        // --- Logic for MOBILE Taps (using touchstart) ---
+        parent.addEventListener('touchstart', (event) => {
+            // Only run this logic on mobile-sized screens
+            if (window.innerWidth >= 769) {
+                return;
+            }
 
-            // Now, show the new menu.
+            // This is the fix for the two-tap issue on mobile.
+            // It prevents the browser from waiting for a 'click'.
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const isAlreadyVisible = flyoutMenu.classList.contains('visible');
+
+            // Always close all flyouts first.
+            closeAllFlyouts();
+            
+            // If the menu we tapped wasn't already open, show it.
+            // This creates a clean "tap-to-open, tap-somewhere-else-to-close" behavior.
+            if (!isAlreadyVisible) {
+                parent.classList.add('active-flyout-parent');
+                flyoutMenu.classList.add('visible');
+            }
+        }, { passive: false }); // Required for preventDefault() to work reliably
+
+
+        // --- Logic for DESKTOP Hover ---
+        const openMenu = () => {
+            clearTimeout(flyoutTimeout);
+            closeAllFlyouts();
             parent.classList.add('active-flyout-parent');
             flyoutMenu.classList.add('visible');
         };
 
         const closeMenu = () => {
-            // Start a short timer. If the mouse doesn't move onto the
-            // flyout menu within this time, we'll close everything.
             flyoutTimeout = setTimeout(() => {
                 closeAllFlyouts();
-            }, 300); // 300 milliseconds
+            }, 50);
         };
 
-        // Listen for the mouse entering "Programs" or "Documents"
         parent.addEventListener('mouseenter', openMenu);
-        
-        // Listen for the mouse leaving "Programs" or "Documents"
         parent.addEventListener('mouseleave', closeMenu);
-
-        // Listen for the mouse entering the flyout menu itself
-        flyoutMenu.addEventListener('mouseenter', () => {
-            // If the mouse successfully enters the flyout, cancel the timer that would have closed it.
-            clearTimeout(flyoutTimeout);
-        });
-
-        // Listen for the mouse leaving the flyout menu
+        flyoutMenu.addEventListener('mouseenter', () => clearTimeout(flyoutTimeout));
         flyoutMenu.addEventListener('mouseleave', closeMenu);
     });
     const flyoutItems = document.querySelectorAll('.flyout-menu li');
 
     flyoutItems.forEach(item => {
-        // Check if the item is not a separator
+        // Skip any list items that are just separators
         if (item.classList.contains('separator')) {
-            return; // Skip separators
+            return;
         }
 
-        item.addEventListener('click', () => {
+        // This is the core action: find the app icon and launch it.
+        // We put it in a function so we don't have to write it twice.
+        const launchApp = () => {
             const appToLaunch = item.dataset.app;
+            if (!appToLaunch) return;
 
-            // Find the corresponding desktop icon and trigger its double-click event
             let iconToClick;
             switch (appToLaunch) {
                 case 'moth':
@@ -895,7 +874,6 @@ function initializeDesktop() {
             }
 
             if (iconToClick) {
-                // Create and dispatch a 'dblclick' event
                 const dblClickEvent = new MouseEvent('dblclick', {
                     bubbles: true,
                     cancelable: true,
@@ -904,11 +882,21 @@ function initializeDesktop() {
                 iconToClick.dispatchEvent(dblClickEvent);
             }
 
-            // Hide the start menu after clicking
+            // Hide the start menu after the app is launched
             startMenu.style.display = 'none';
             closeAllFlyouts();
-        });
-    }); 
+        };
+
+        // For MOBILE: Listen for the 'touchstart' event.
+        item.addEventListener('touchstart', (event) => {
+            event.stopPropagation(); // Stop the event from bubbling to the parent
+            event.preventDefault();  // Prevents the browser from firing a "ghost click"
+            launchApp();
+        }, { passive: false });
+
+        // For DESKTOP: Also listen for the 'click' event.
+        item.addEventListener('click', launchApp);
+    });
     // Call the function to open welcome windows at the end of initialization
     openWelcomeWindows(); 
 
