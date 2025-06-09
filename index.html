@@ -37,6 +37,17 @@
         <div class="desktop-icon" id="icon-moth"><img src="images/moth.png" alt="Luana Moth"> 
             <span>Luana_Moth.exe</span>
         </div>
+        <div class="desktop-icon" id="icon-photos-folder" 
+            data-window-id="photos-folder-window" 
+            data-window-title="Photos" 
+            data-content-type="custom-photo-list"> 
+            <img src="images/folder.png" alt="Photos Folder"> 
+            <span>Photos</span>
+        </div>
+        <div class="desktop-icon" id="icon-cep">
+            <img src="images/brain.png" alt="CEP BBS"> 
+            <span>CEP.BAT</span>
+        </div>
     </div>
 
     <div id="taskbar">
@@ -65,17 +76,23 @@
                     <li data-app="lichtung">
                         <img src="images/job.png" class="flyout-icon"> text_dissolution.exe
                     </li>
+                    <li data-app="cep">
+                        <img src="images/brain.png" class="flyout-icon"> CEP.BAT
+                    </li>
                 </ul>
             </li>
 
             <li class="has-flyout">
                 <span>D</span>ocuments <span class="flyout-arrow">&#9654;</span>
                 <ul class="flyout-menu">
+                    <li data-app="operator-log">
+                        <img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG
+                    </li>
                     <li data-app="art-folder">
                         <img src="images/folder.png" class="flyout-icon"> Art
                     </li>
-                    <li data-app="operator-log">
-                        <img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG
+                    <li data-app="photos-folder">
+                        <img src="images/folder.png" class="flyout-icon"> Photos
                     </li>
                 </ul>
             </li>
@@ -101,6 +118,6 @@
         </div>
         <div class="resize-handle"></div> </div>
 
-        <script src="script.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
