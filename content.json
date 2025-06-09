@@ -5,7 +5,7 @@
   },
   "moyamoyaLauncher": {
     "title": "Moyamoya OS - Launcher",
-    "text": "This is a interactive ARG for the band MOYAMOYA. It is an experience that should be viewed as an 'escape room' or a puzzle. It's primary function is to develop the band aethetic, so whethere the user sends 10 second or 1 hour playing this 'game' it communicates the artistic direction of the band. The experience is deep and has multiple puzzles and levels in it."
+    "text": "This is a interactive ARG for the band MOYAMOYA. It is an experience that should be viewed as an 'escape room' or a puzzle. It's primary function is to develop the band aethetic, so whether the user spends 10 second or 1 hour playing this 'game' it communicates the artistic direction of the band. The experience is deep and has multiple puzzles and levels in it."
   },
   "lichtungExplainer": {
     "title": "Lichtung - Notes",
@@ -17,6 +17,10 @@
   },
   "welcomeNote": {
     "title": "Welcome.txt",
-    "text": "Welcome to GEORGE OS!\n\nThis is an interactive portfolio. Feel free to explore.\n\n- Double-click icons to open them.\n- Drag windows by their title bars.\n- Resize windows using the handle in the bottom-right corner."
+    "text": "Welcome to GEORGE OS!\n\nThis is an interactive portfolio. Feel free to explore.\n\n- Double-click icons to open them.\n- Drag windows by their title bars.\n- Resize windows using the handle in the bottom-right corner. \n-Or use the start menu to navigate!"
+  },
+  "cepExplainer": {
+    "title": "CEP BBS - Notes",
+    "text": "This experience represents the next chapter of the Moyamoya ARG, moving beyond the personal command-line interface of MMOS.exe into the semi-public space of a dial-up Bulletin Board System (BBS).\n\nIt explores storytelling through archaic digital formats, presenting lore and narrative fragments as a form of 'digital found footage' for the user to discover and piece together."
   }
 }
