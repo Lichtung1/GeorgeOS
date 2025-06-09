@@ -31,18 +31,34 @@ export function initializeStartMenu(startButton, startMenu) {
 
     // --- Logic for regular start menu items ---
     startMenu.querySelectorAll('li').forEach(item => {
+        // This part is important: it skips the 'Programs' and 'Documents'
+        // parent items, since they only open flyouts.
         if (item.classList.contains('has-flyout')) {
-            return; // Skip parents, they are handled below
+            return; 
         }
+
+        // Your new, correct event listener goes INSIDE the loop
         item.addEventListener('click', (e) => {
             const action = item.dataset.action;
+            const app = item.dataset.app; // Get the app name too
+
             if (action === 'open-window') {
+                // This handles your old items like "Find"
                 openWindow(
                     item.dataset.windowId, item.dataset.windowTitle, item.dataset.contentType,
                     item.dataset.content, item.dataset.contentUrl, item.dataset.contentKey,
                     item.dataset.windowTitleKey
                 );
+            } else if (app) {
+                // This NEW part handles our "Settings" button!
+                const iconToClick = document.getElementById(`icon-${app}`);
+                if (iconToClick) {
+                    // Fake a double-click on the desktop icon
+                    iconToClick.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+                }
             }
+
+            // Close the menu after any action
             startMenu.style.display = 'none';
             closeAllFlyouts();
         });

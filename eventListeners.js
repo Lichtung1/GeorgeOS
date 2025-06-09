@@ -7,7 +7,7 @@ import { openWindow, promptForPassword } from './windowManager.js';
 export function initializeEventListeners(desktop) {
 
     // --- 1. Generic listener for all icons that DON'T have special behaviors ---
-    desktop.querySelectorAll('.desktop-icon:not(#icon-mmos):not(#icon-lichtung):not(#icon-moth):not(#icon-cep)').forEach(icon => {
+    desktop.querySelectorAll('.desktop-icon:not(#icon-mmos):not(#icon-lichtung):not(#icon-moth):not(#icon-cep):not(#icon-settings)').forEach(icon => {
         // Double-click to open the window associated with the icon
         icon.addEventListener('dblclick', () => {
             openWindow(
@@ -160,7 +160,71 @@ export function initializeEventListeners(desktop) {
             cepIcon.classList.add('selected');
         });
     }
-    // --- 6. Listener for clicking on the empty desktop background ---
+
+    // --- 6. Special listener for the Settings icon ---
+    const settingsIcon = document.getElementById('icon-settings');
+    if (settingsIcon) {
+        settingsIcon.addEventListener('dblclick', () => {
+        const settingsContent = document.createElement('div');
+        settingsContent.className = 'settings-panel'; // Use our new flex container class
+
+        // Replace your old innerHTML with this new version
+        settingsContent.innerHTML = `
+            <img src="images/settings_icon.png" alt="Settings Icon" class="settings-icon">
+            <div class="settings-content">
+                <fieldset>
+                    <legend>Desktop Wallpaper</legend>
+                    <p>Select a background image for your desktop.</p>
+                    <div class="wallpaper-options">
+                        <button data-wallpaper="images/win95.jpg">Windows 95</button>
+                        <button data-wallpaper="images/XP_GrassandSky.jpg">Windows XP</button>
+                        <button data-wallpaper="images/jungle.jpg">Jungle</button>
+                        <button data-wallpaper="images/mystery.jpg">Mystery</button>
+                        <button data-wallpaper="images/science.jpg">Science</button>
+                        <button data-wallpaper="images/davinci.jpg">Da Vinci</button>
+                        <button data-wallpaper="images/space_wallpaper.png">Space</button>
+                        <button data-wallpaper="">None (Default)</button>
+                    </div>
+                </fieldset>
+            `;
+
+            // Now, we attach click events to our new wallpaper buttons
+            const desktop = document.getElementById('desktop');
+            settingsContent.querySelectorAll('.wallpaper-options button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const wallpaperUrl = button.dataset.wallpaper;
+                    const desktop = document.getElementById('desktop');
+
+                    if (wallpaperUrl) {
+                        desktop.style.backgroundImage = `url('${wallpaperUrl}')`;
+                        desktop.style.backgroundRepeat = 'no-repeat';
+                        desktop.style.backgroundPosition = 'center center';
+                        desktop.style.backgroundSize = 'cover';
+                    } else {
+                        // This clears the image completely
+                        desktop.style.backgroundImage = 'none';
+                    }
+                });
+            });
+
+            // Finally, open the window and pass in our custom HTML content
+            openWindow(
+                'settings-window',      // Window ID
+                'Settings',             // Window Title
+                'custom',               // Content Type
+                settingsContent,        // The custom HTML element we just built
+                null, null, null
+            );
+        });
+
+        // This makes single-clicking select the icon
+        settingsIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
+            settingsIcon.classList.add('selected');
+        });
+    }
+    // --- 7. Listener for clicking on the empty desktop background ---
     // Its only job is to de-select any selected icons.
     desktop.addEventListener('click', (e) => {
         // If the click happened directly on the desktop and not an icon

@@ -455,9 +455,16 @@ export function openWindow(id, htmlTitleFallback, contentType, directContent, co
     const desktopWidth = desktop.offsetWidth;
     const isMobile = desktopWidth <= 768;
 
+    // Replace the old block with this one
     if (isMobile) {
-        // Check if the window has our new 'explainer-window' class
-        if (windowElement.classList.contains('explainer-window')) {
+        // NEW: First, check if it's the settings window
+        if (id === 'settings-window') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '40%'; // Your desired height
+            windowElement.style.left = '5%';
+            windowElement.style.top = '10%';   // Position it near the top
+
+        } else if (windowElement.classList.contains('explainer-window')) {
             // --- SPECIAL rules for ALL explainer windows on mobile ---
             windowElement.style.width = '80%';
             windowElement.style.height = '35%';
@@ -465,10 +472,11 @@ export function openWindow(id, htmlTitleFallback, contentType, directContent, co
             windowElement.style.top = '15%';
 
         } else {
-            windowElement.style.width = '90%';   // 90% of screen width
-            windowElement.style.height = '90%';  // 85% of screen height
-            windowElement.style.left = '5%';     // 5% from the left
-            windowElement.style.top = '5%';      // 5% from the top
+            // Fallback for all other windows
+            windowElement.style.width = '90%';
+            windowElement.style.height = '90%';
+            windowElement.style.left = '5%';
+            windowElement.style.top = '5%';
         }
     }
     return windowElement;

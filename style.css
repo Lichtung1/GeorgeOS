@@ -638,6 +638,66 @@ li.project-item:hover .project-description {
     display: none;
 }
 
+/* 2. SETTTINGS*/
+#settings-window .window-body {
+    background-color: #c0c0c0; /* The classic Win95 gray! */
+    border: none;             /* Removes the inner "sunken" border */
+    padding: 10px;
+}
+
+/* 2. A flex container to place the icon and content side-by-side */
+.settings-panel {
+    display: flex;
+    gap: 15px; /* Space between icon and the content */
+}
+
+/* 3. Style for the large icon on the left */
+.settings-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0; /* Prevents the icon from shrinking */
+}
+
+/* 4. A container for the text and buttons on the right */
+.settings-content {
+    flex-grow: 1; /* Allows this section to take up the remaining space */
+}
+
+/* 5. Style the <fieldset> to look like a classic Win95 group box */
+.settings-content fieldset {
+    border: 1px groove #c0c0c0;
+    border-top: 1px groove #808080;
+    padding: 10px;
+}
+
+.settings-content legend {
+    padding: 0 5px; /* Gives a little space around the legend text */
+    font-weight: bold;
+}
+
+/* 6. Style the buttons inside the wallpaper options */
+.wallpaper-options {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap; /* Allows buttons to wrap to the next line */
+    gap: 8px;
+}
+
+/* Use the existing win95-button style for consistency */
+.wallpaper-options button {
+    background-color: #c0c0c0;
+    border-width: 1px;
+    border-style: outset;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 3px 12px;
+    cursor: pointer;
+}
+
+.wallpaper-options button:active {
+    border-style: inset;
+    padding: 4px 11px 2px 13px;
+}
+
 /* =================================== */
 /* ====   Mobile Responsive Styles  ==== */
 /* =================================== */
