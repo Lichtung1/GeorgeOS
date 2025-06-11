@@ -20,7 +20,10 @@
         data-content-key="operatorLog"> <img src="images/operator_log_icon.png" alt="Operator Log"> 
             <span>OPERATOR.LOG</span>
         </div>
-
+        <div class="desktop-icon" id="icon-help" data-window-id="help-window" data-window-title="Help" data-content-key="helpContent">
+            <img src="images/help_icon.png" alt="Help">
+            <span>Help</span>
+        </div>
         <div class="desktop-icon" id="icon-mmos"> <img src="images/MMOS.png" alt="Moyamoya OS"> 
             <span>MMOS.exe</span>
         </div>
@@ -65,49 +68,60 @@
 
     <div id="start-menu" class="start-menu" style="display: none;">
         <div class="start-menu-header">
-            <strong>Windows</strong><span class="ninety-five">95</span>
+            <strong>George</strong><span class="ninety-five">OS</span>
         </div>
         <ul>
             <li class="has-flyout">
-                <span>P</span>rograms <span class="flyout-arrow">&#9654;</span>
+                <img src="images/programs_icon.png" class="start-menu-icon">
+                <span><u>P</u>rograms</span>
+                <span class="flyout-arrow">&#9654;</span>
                 <ul class="flyout-menu">
-                    <li data-app="moth">
-                        <img src="images/moth.png" class="flyout-icon"> Luana_Moth.exe
-                    </li>
-                    <li data-app="mmos">
-                        <img src="images/MMOS.png" class="flyout-icon"> MMOS.exe
-                    </li>
-                    <li data-app="lichtung">
-                        <img src="images/job.png" class="flyout-icon"> text_dissolution.exe
-                    </li>
-                    <li data-app="cep">
-                        <img src="images/brain.png" class="flyout-icon"> CEP.BAT
-                    </li>
+                    <li data-app="moth"><img src="images/moth.png" class="flyout-icon"> Luana_Moth.exe</li>
+                    <li data-app="mmos"><img src="images/MMOS.png" class="flyout-icon"> MMOS.exe</li>
+                    <li data-app="lichtung"><img src="images/job.png" class="flyout-icon"> text_dissolution.exe</li>
+                    <li data-app="cep"><img src="images/brain.png" class="flyout-icon"> CEP.BAT</li>
                 </ul>
             </li>
 
             <li class="has-flyout">
-                <span>D</span>ocuments <span class="flyout-arrow">&#9654;</span>
+                <img src="images/documents_icon.png" class="start-menu-icon">
+                <span><u>D</u>ocuments</span>
+                <span class="flyout-arrow">&#9654;</span>
                 <ul class="flyout-menu">
-                    <li data-app="operator-log">
-                        <img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG
-                    </li>
-                    <li data-app="art-folder">
-                        <img src="images/folder.png" class="flyout-icon"> Art
-                    </li>
-                    <li data-app="photos-folder">
-                        <img src="images/folder.png" class="flyout-icon"> Photos
-                    </li>
+                    <li data-app="operator-log"><img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG</li>
+                    <li data-app="art-folder"><img src="images/folder.png" class="flyout-icon"> Art</li>
+                    <li data-app="photos-folder"><img src="images/folder.png" class="flyout-icon"> Photos</li>
                 </ul>
             </li>
 
-            <li data-app="settings"><span>S</span>ettings</li>
-            <li data-action="open-window" data-window-id="find-window" data-window-title="Find" data-content-type="text" data-content="Find: Files or Folders..."><span>F</span>ind</li>
+            <li data-app="settings">
+                <img src="images/settings_icon.png" class="start-menu-icon">
+                <span><u>S</u>ettings</span>
+            </li>
+
+            <li data-action="open-window" data-window-id="find-window" data-window-title="Find" data-content-type="text" data-content="Find: Files or Folders...">
+                <img src="images/find_icon.png" class="start-menu-icon">
+                <span><u>F</u>ind</span>
+            </li>
+
             <li class="separator"></li>
-            <li data-action="help"><span>H</span>elp</li>
-            <li data-action="run"><span>R</span>un...</li>
+
+            <li data-app="help">
+                <img src="images/help_icon.png" class="start-menu-icon">
+                <span><u>H</u>elp</span>
+            </li>
+
+            <li data-action="run">
+                <img src="images/run_icon.png" class="start-menu-icon">
+                <span><u>R</u>un...</span>
+            </li>
+
             <li class="separator"></li>
-            <li data-action="shutdown">Sh<span>u</span>t Down...</li>
+
+            <li data-action="shutdown">
+                <img src="images/shutdown_icon.png" class="start-menu-icon">
+                <span>Sh<u>u</u>t Down...</span>
+            </li>
         </ul>
     </div>
 

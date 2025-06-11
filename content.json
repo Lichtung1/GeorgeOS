@@ -17,10 +17,14 @@
   },
   "welcomeNote": {
     "title": "Welcome.txt",
-    "text": "Welcome to GEORGE OS!\n\nThis is an interactive portfolio. Feel free to explore.\n\n- Double-click icons to open them.\n- Drag windows by their title bars.\n- Resize windows using the handle in the bottom-right corner. \n-Or use the start menu to navigate!"
+    "text": "Welcome to GEORGE OS!\n\nThis is an interactive portfolio. Feel free to explore.\n\n\nHOW TO USE THIS PORTFOLIO\n---------------------------\nThis website is designed to function like a retro desktop operating system. You can interact with it in several ways:\n\n* ICONS: Double-click any icon on the desktop to open it.\n\n* WINDOWS: Drag windows by their blue title bars to move them around. You can also resize them using the handle in the bottom-right corner.\n\n* START MENU: Use the Start button in the bottom-left to navigate all available programs and documents.\n\n\n--------------------------\nThank you for visiting!"
   },
   "cepExplainer": {
     "title": "CEP BBS - Notes",
     "text": "This experience represents the next chapter of the Moyamoya ARG, moving beyond the personal command-line interface of MMOS.exe into the semi-public space of a dial-up Bulletin Board System (BBS).\n\nIt explores storytelling through archaic digital formats, presenting lore and narrative fragments as a form of 'digital found footage' for the user to discover and piece together."
+  },
+    "helpContent": {
+    "title": "Help Topics",
+    "text": "GEORGE OS Portfolio Help\n--------------------------\n\nWelcome to the help system for the GEORGE DYCK OS interactive portfolio.\n\n\nHOW TO USE THIS PORTFOLIO\n---------------------------\nThis website is designed to function like a retro desktop operating system. You can interact with it in several ways:\n\n* ICONS: Double-click any icon on the desktop to open it.\n\n* WINDOWS: Drag windows by their blue title bars to move them around. You can also resize them using the handle in the bottom-right corner.\n\n* START MENU: Use the Start button in the bottom-left to navigate all available programs and documents.\n\n\n--------------------------\nThank you for visiting!"
   }
 }

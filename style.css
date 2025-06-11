@@ -303,7 +303,7 @@ body {
     padding: 1px;
 }
 .start-menu-header {
-    background-color: #808080;
+    background-image: linear-gradient(to bottom, #000080, #0101ff);
     color: #c0c0c0;
     padding: 10px 5px;
     writing-mode: vertical-rl;
@@ -353,6 +353,31 @@ body {
 }
 .start-menu li.separator:hover {
     background-color: #808080;
+}
+
+/* This turns each list item into a flex container to easily align its children (the icon and text) */
+.start-menu ul > li {
+    display: flex;
+    align-items: center; /* This vertically aligns the icon and text to the middle */
+    padding: 4px 10px;   /* Give it some nice padding */
+}
+
+/* This styles the new icons you just added */
+.start-menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px; /* Creates a clean space between the icon and the text */
+}
+
+/* This ensures the text inside the <span> tag behaves correctly */
+.start-menu ul > li > span {
+    flex-grow: 1; /* This makes the text take up the remaining space */
+}
+
+/* This makes sure the underline for the hotkey looks right */
+.start-menu li u {
+    text-decoration: underline;
+    font-weight: normal;
 }
 
 /* Styles for the 3D Animation List */
