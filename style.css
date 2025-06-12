@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 body {
     font-family: "MS Sans Serif", "Tahoma", "Geneva", sans-serif; /* More specific W95 font stack */
     font-size: 12px;
@@ -355,32 +356,27 @@ body {
     background-color: #808080;
 }
 
-/* This turns each list item into a flex container to easily align its children (the icon and text) */
 .start-menu ul > li {
     display: flex;
     align-items: center; /* This vertically aligns the icon and text to the middle */
     padding: 4px 10px;   /* Give it some nice padding */
 }
 
-/* This styles the new icons you just added */
 .start-menu-icon {
     width: 24px;
     height: 24px;
     margin-right: 8px; /* Creates a clean space between the icon and the text */
 }
 
-/* This ensures the text inside the <span> tag behaves correctly */
 .start-menu ul > li > span {
     flex-grow: 1; /* This makes the text take up the remaining space */
 }
 
-/* This makes sure the underline for the hotkey looks right */
 .start-menu li u {
     text-decoration: underline;
     font-weight: normal;
 }
 
-/* Styles for the 3D Animation List */
 .file-explorer-list {
     padding: 5px;
     height: 100%;
@@ -448,7 +444,6 @@ body {
     text-align: right;
 }
 
-/* Styles for the new image viewer window */
 .window-body.image-viewer-container {
     padding: 0;
     overflow: hidden;
@@ -507,7 +502,6 @@ li.project-item:hover .project-description {
     margin-top: 2px;
 }
 
-/* Styles for "About Me" text window content */
 .win95-section-header {
     font-size: 12px;
     font-weight: bold;
@@ -534,16 +528,16 @@ li.project-item:hover .project-description {
 }
 #lmg-main-window.window {
     width: 100% !important;
-    height: calc(100%) !important; /* Full height minus the taskbar */
+    height: calc(100%) !important; 
     top: 0 !important;
     left: 0 !important;
 }
-/* 1. The 'Programs' item itself. It's the positioning parent. */
+
 .start-menu li.has-flyout {
     position: relative;
 }
 
-/* 2. The arrow on the 'Programs' item. */
+
 .flyout-arrow {
     position: absolute;
     right: 5px;
@@ -552,7 +546,7 @@ li.project-item:hover .project-description {
     font-size: 8px;
 }
 
-/* 3. The Fly-out Menu. Hidden by default. */
+
 .flyout-menu {
     display: none;
     position: absolute;
@@ -568,20 +562,17 @@ li.project-item:hover .project-description {
     z-index: 102; /* Make sure it appears on top */
 }
 
-/* 4. The hover trigger to show the menu. */
 @media (min-width: 769px) and (hover: hover) {
     .start-menu li.has-flyout:hover > .flyout-menu {
         display: block;
     }
 }
 
-/* --- Mobile Tap Behavior (controlled by JavaScript) --- */
 .flyout-menu.visible {
     display: block;
 }
 
-/* 5. The INVISIBLE BRIDGE to cover the gap. */
-/* I've added a pink background for debugging. If you see a pink bar, it's working! */
+
 .start-menu li.has-flyout::after {
     content: '';
     position: absolute;
@@ -591,7 +582,7 @@ li.project-item:hover .project-description {
     height: 100%;
 }
 
-/* 6. Styles for the icons inside the new menu. */
+
 .flyout-icon {
     width: 16px;
     height: 16px;
@@ -627,9 +618,7 @@ li.project-item:hover .project-description {
 }
 
 
-/* ---- Consolidated styles for the Password Prompt Dialog ---- */
 
-/* This single rule styles the main content area of the dialog */
 #password-prompt-dialog .window-body {
     background-color: #c0c0c0; /* Final gray background color */
     font-family: "MS Sans Serif", sans-serif;
@@ -640,55 +629,55 @@ li.project-item:hover .project-description {
     align-items: center;
 }
 
-/* Styles paragraphs inside the dialog */
+
 #password-prompt-dialog .window-body p {
     margin-bottom: 10px;
     text-align: center;
 }
 
-/* This single rule styles the input field specifically inside the dialog */
+
 #password-prompt-dialog .window-body .win95-input {
     margin-bottom: 15px;
     background-color: #ffffff; /* Ensures the input field stays white */
 }
 
-/* Styles the container for the OK/Cancel buttons */
+
 #password-prompt-dialog .window-body > div {
     display: flex;
     gap: 10px;
 }
 
-/* Hides the resize handle on the dialog */
+
 #password-prompt-dialog .resize-handle {
     display: none;
 }
 
-/* 2. SETTTINGS*/
+
 #settings-window .window-body {
-    background-color: #c0c0c0; /* The classic Win95 gray! */
-    border: none;             /* Removes the inner "sunken" border */
+    background-color: #c0c0c0; 
+    border: none;             
     padding: 10px;
 }
 
-/* 2. A flex container to place the icon and content side-by-side */
+
 .settings-panel {
     display: flex;
-    gap: 15px; /* Space between icon and the content */
+    gap: 15px; 
 }
 
-/* 3. Style for the large icon on the left */
+
 .settings-icon {
     width: 48px;
     height: 48px;
-    flex-shrink: 0; /* Prevents the icon from shrinking */
+    flex-shrink: 0; 
 }
 
-/* 4. A container for the text and buttons on the right */
+
 .settings-content {
-    flex-grow: 1; /* Allows this section to take up the remaining space */
+    flex-grow: 1; 
 }
 
-/* 5. Style the <fieldset> to look like a classic Win95 group box */
+
 .settings-content fieldset {
     border: 1px groove #c0c0c0;
     border-top: 1px groove #808080;
@@ -700,7 +689,7 @@ li.project-item:hover .project-description {
     font-weight: bold;
 }
 
-/* 6. Style the buttons inside the wallpaper options */
+
 .wallpaper-options {
     margin-top: 10px;
     display: flex;
@@ -708,7 +697,7 @@ li.project-item:hover .project-description {
     gap: 8px;
 }
 
-/* Use the existing win95-button style for consistency */
+
 .wallpaper-options button {
     background-color: #c0c0c0;
     border-width: 1px;
@@ -723,28 +712,60 @@ li.project-item:hover .project-description {
     padding: 4px 11px 2px 13px;
 }
 
-/* =================================== */
-/* ====   Mobile Responsive Styles  ==== */
-/* =================================== */
 
-/* This targets any screen with a width of 768px or less (tablets and phones) */
+#shutdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    z-index: 10000; /* Ensures it's on top of absolutely everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Starts invisible for fade-in effect */
+    transition: opacity 1.5s ease-in-out; /* A slightly slower, more dramatic fade */
+}
+
+#shutdown-overlay.visible {
+    opacity: 1; 
+}
+
+#shutdown-message {
+    color: white;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif; 
+    font-size: 2em;
+    text-align: center;
+}
+
+#shutdown-confirm-dialog .window-body {
+    background-color: #c0c0c0; /* This sets the gray background */
+    border: none;              /* This removes the "sunken" border effect for a flat dialog look */
+}
+
+#safe-off-message {
+    color: #FFB800;
+    font-family: "MS Sans Serif", "Tahoma", sans-serif;
+    font-size: 1.5em;
+    text-align: center;
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001; 
+}
+
+
+/* Mobile Responsive Styles   */
+
 @media (max-width: 768px) {
     .start-menu li.active-flyout-parent {
         background-color: #000080;
         color: white;
     }
-    /* Force all windows to be smaller and positioned correctly */
 
-
-    /* Optional: On mobile, it can be tricky having two windows open at once.
-       You might want to hide the smaller "explainer" window and only show the main ARG.
-       To do that, you could uncomment the rule below. */
-
-    /*
-    #moyamoya-explainer-window {
-        display: none !important;
-    }
-    */
     #lmg-main-window.window {
         width: 100% !important;
         height: calc(100%) !important; /* Full height minus the taskbar */
@@ -759,7 +780,6 @@ li.project-item:hover .project-description {
         transform: translateZ(0); /* Fixes layering issues */
     }
 
-    /* 2. Makes viewers from the folder fullscreen, but EXCLUDES the initial profile photo */
     .window.viewer-window:not(#photo-viewer-window) {
         width: 100% !important;
         height: calc(100% - 30px) !important; 
@@ -767,7 +787,6 @@ li.project-item:hover .project-description {
         left: 0 !important;
     }
 
-     /* The only rules that should remain are for general desktop tidiness */
     #desktop {
         gap: 10px;
         padding: 10px;
@@ -777,5 +796,252 @@ li.project-item:hover .project-description {
         width: 65px;
         margin-bottom: 15px;
     }
+
+    
+    .start-menu-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px; 
+    }
+
+    .start-menu ul > li {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .flyout-icon {
+        width: 16px;
+        height: 16px;
+    }
+
 }
 
+#run-dialog .window-body {
+    background-color: #c0c0c0;
+    border: none; /* Dialogs usually don't have the inner sunken border */
+}
+
+#find-terminal-window .window-body {
+    background-color: black;
+    padding: 0; /* Removes padding so the terminal content can fill the space */
+    border: none;
+}
+
+/* Hacker Theme  */
+
+.hacker-theme, 
+.hacker-theme #desktop {
+    background-color: #0d0d0d !important;
+    background-image: none !important;
+}
+
+.hacker-theme .desktop-icon span {
+    color: #00FF00;
+    text-shadow: 0 0 4px rgba(0, 255, 0, 0.7);
+}
+
+.hacker-theme .window,
+.hacker-theme #taskbar,
+.hacker-theme #start-menu,
+.hacker-theme #start-button, /* <-- THE MISSING PIECE! */
+.hacker-theme .flyout-menu,
+.hacker-theme .win95-button,
+.hacker-theme .taskbar-button,
+.hacker-theme .title-bar-controls button {
+    background-color: #1a1a1a !important;
+    border-color: #00FF00 #222 #222 #00FF00;
+    color: #00FF00;
+}
+
+.hacker-theme .taskbar-button.active {
+    background-color: #2a2a2a !important;
+    border-color: #adff2f #333 #333 #adff2f;
+    font-weight: bold;
+    color: #adff2f;
+}
+
+.hacker-theme #start-button:active {
+    border-color: #222 #00FF00 #00FF00 #222; /* Inset border effect */
+    color: #adff2f; /* Brighter green when pressed */
+}
+
+.hacker-theme .title-bar {
+    background-color: #008f00 !important;
+    color: #ceff00 !important;
+}
+
+.hacker-theme .window-body {
+    background-color: #0d0d0d !important;
+    border-color: #222 #00FF00 #00FF00 #222;
+    color: #00FF00;
+}
+
+.hacker-theme .start-menu-header {
+    background-image: linear-gradient(to bottom, #008f00, #00FF00);
+}
+
+.hacker-theme .start-menu li:hover,
+.hacker-theme .flyout-menu li:hover {
+    background-color: #008f00 !important;
+    color: #ceff00 !important;
+}
+
+.hacker-theme textarea,
+.hacker-theme .win95-input {
+    background-color: #111 !important;
+    color: #00FF00;
+    border-color: #222 #00FF00 #00FF00 #222;
+}
+
+.hacker-theme #taskbar-clock {
+    background-color: #1a1a1a;
+    border-color: #222 #00FF00 #00FF00 #222;
+    color: #00FF00;
+}
+
+
+
+#firewall-game .window-body {
+    padding: 0;
+    border: none;
+    overflow: hidden; 
+    
+    background-color: #000000 !important; 
+
+    font-family: 'VT323', 'Courier New', monospace;
+    font-size: 20px;
+
+}
+.terminal-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.terminal-sidebar h4 {
+    color: #00FF00;
+}
+
+
+.terminal-column {
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+    z-index: 1; 
+}
+
+#terminal-main-screen {
+    flex-basis: 70%;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-y: auto;
+    color: #00FF00; 
+}
+
+
+.terminal-sidebar {
+    flex-basis: 30%;
+    border-left: 2px solid #008f00;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(13, 13, 13, 0.5);
+    text-shadow: none; 
+}
+
+#terminal-log {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #111;
+    border: 1px solid;
+    border-color: #222 #00FF00 #00FF00 #222;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #00FF00;
+}
+
+#terminal-attempts {
+    font-weight: bold;
+    border-top: 2px solid #008f00;
+    padding-top: 10px;
+    text-transform: uppercase;
+    color: #00FF00; 
+}
+
+.word, .bonus {
+    cursor: pointer;
+    background-color: #004400;
+    padding: 0 2px;
+    transition: all 0.1s ease;
+}
+
+.word:hover, .bonus:hover {
+    background-color: #008f00 !important;
+    color: #ceff00 !important;
+    text-shadow: none;
+}
+
+.word.disabled, .bonus.disabled {
+    background-color: transparent;
+    color: #336633;
+    cursor: default;
+}
+
+#terminal-main-screen.win {
+    background-color: #adff2f;
+    color: #000;
+    text-shadow: none;
+}
+
+#terminal-main-screen.fail {
+    background-color: #ff0000;
+    color: #000;
+    text-shadow: none;
+}
+
+
+/* Mobile Styles for the Game */
+
+@media (max-width: 768px) {
+    #firewall-game .window-body {
+        font-size: 18px; 
+    }
+
+    .terminal-wrapper {
+        flex-direction: column; 
+    }
+
+
+    #terminal-main-screen,
+    .terminal-sidebar {
+        flex-basis: auto;
+    }
+
+    #terminal-main-screen {
+        flex-basis: 70%;
+        white-space: pre-wrap;
+        word-break: break-all;
+        overflow-y: auto;
+        color: #00FF00; 
+    }
+
+    .terminal-sidebar {
+        height: 40%; 
+        border-left: none;
+        border-top: 2px solid #008f00; 
+    }
+}
+
+#treasure-window .window-body {
+    background-color: #c0c0c0;
+    color: #000;
+}
+
+.hacker-theme #treasure-window .window-body {
+    color: #00FF00;
+}
+
+#error-help-corrupted .window-body {
+    background-color: #c0c0c0;
+    padding: 0; 
+}

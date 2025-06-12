@@ -37,4 +37,10 @@ export function initializeDesktop() {
 
     // 5. Open the initial windows after everything else is set up
     openWelcomeWindows();
+    if (localStorage.getItem('firewall_is_active') === 'true') {
+        const firewallIcon = document.getElementById('icon-firewall');
+        if (firewallIcon) {
+            firewallIcon.style.display = 'block';
+        }
+    }
 }

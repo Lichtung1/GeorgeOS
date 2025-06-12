@@ -1,29 +1,20 @@
 import { openWindow, promptForPassword } from './windowManager.js';
-
+import { startFirewallGame } from './games.js'; 
 /**
  * Initializes all event listeners related to desktop icons and the desktop itself.
  * @param {HTMLElement} desktop The main desktop element.
  */
 export function initializeEventListeners(desktop) {
-
-    // --- 1. Generic listener for all icons that DON'T have special behaviors ---
-    desktop.querySelectorAll('.desktop-icon:not(#icon-mmos):not(#icon-lichtung):not(#icon-moth):not(#icon-cep):not(#icon-settings)').forEach(icon => {
-        // Double-click to open the window associated with the icon
-        icon.addEventListener('dblclick', () => {
+    // --- 1. Generic listener (Correctly ignores #icon-help) ---
+    desktop.querySelectorAll('.desktop-icon:not(#icon-mmos):not(#icon-lichtung):not(#icon-moth):not(#icon-cep):not(#icon-settings):not(#icon-help):not(#icon-firewall)').forEach(icon => {        icon.addEventListener('dblclick', () => {
             openWindow(
-                icon.dataset.windowId,
-                icon.dataset.windowTitle,
-                icon.dataset.contentType,
-                icon.dataset.content,
-                icon.dataset.contentUrl,
-                icon.dataset.contentKey,
+                icon.dataset.windowId, icon.dataset.windowTitle, icon.dataset.contentType,
+                icon.dataset.content, icon.dataset.contentUrl, icon.dataset.contentKey,
                 icon.dataset.windowTitleKey
             );
         });
-
-        // Single-click to select the icon
         icon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents the desktop click listener from firing
+            e.stopPropagation();
             desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
             icon.classList.add('selected');
         });
@@ -101,26 +92,31 @@ export function initializeEventListeners(desktop) {
             lichtungIcon.classList.add('selected');
         });
     }
-
+    const firewallIcon = document.getElementById('icon-firewall');
+    if (firewallIcon) {
+        firewallIcon.addEventListener('dblclick', () => {
+            // This icon now starts the game directly.
+            startFirewallGame();
+        });
+        
+        firewallIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
+            firewallIcon.classList.add('selected');
+        });
+    }
     // --- 4. Special listener for the Moth (LMG.exe) icon ---
     const mothIcon = document.getElementById('icon-moth');
     if (mothIcon) {
-        mothIcon.addEventListener('dblclick', async () => {
-            const correctPassword = "metroxylon";
-            const enteredPassword = await promptForPassword("Password Required");
-
-            if (enteredPassword === correctPassword) {
-                openWindow('lmg-main-window', 'Luana Moth Generator', 'iframe', '', 'https://lichtung1.github.io/LMG/', null, null);
-                openWindow('moth-explainer-window', null, null, null, null, 'mothExplainer', 'mothExplainer', 'explainer-window');
-            } else if (enteredPassword !== null) {
-                alert("Incorrect password.");
-            }
+        mothIcon.addEventListener('dblclick', () => {
+            promptForPassword();
         });
 
         mothIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
             mothIcon.classList.add('selected');
+            promptForPassword();
         });
     }
     // --- 5. Special listener for the CEP.BAT icon ---
@@ -160,7 +156,7 @@ export function initializeEventListeners(desktop) {
             cepIcon.classList.add('selected');
         });
     }
-
+    
     // --- 6. Special listener for the Settings icon ---
     const settingsIcon = document.getElementById('icon-settings');
     if (settingsIcon) {
@@ -224,12 +220,83 @@ export function initializeEventListeners(desktop) {
             settingsIcon.classList.add('selected');
         });
     }
-    // --- 7. Listener for clicking on the empty desktop background ---
-    // Its only job is to de-select any selected icons.
+    const helpIcon = document.getElementById('icon-help');
+    if (helpIcon) {
+        // This is the ONLY dblclick listener for the help icon.
+        helpIcon.addEventListener('dblclick', () => {
+            if (localStorage.getItem('help_is_fixed') === 'true') {
+                // If help is fixed, open the normal help window with its real content
+                openWindow('help-window', 'Help', null, null, null, 'helpContent', 'helpContent');
+            } else {
+                // Otherwise, show the error to start the puzzle
+                showCorruptionError(); 
+            }
+        });
+        
+        helpIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
+            helpIcon.classList.add('selected');
+        });
+    }
+
+    // --- Listener for clicking the desktop background ---
     desktop.addEventListener('click', (e) => {
-        // If the click happened directly on the desktop and not an icon
         if (e.target === desktop) {
             desktop.querySelectorAll('.desktop-icon.selected').forEach(s => s.classList.remove('selected'));
         }
     });
+
+}
+
+function showCorruptionError() {
+    const errorContent = document.createElement('div');
+    
+    const corruptedMessage = corruptText("Help Subsystem CORRUPTED.");
+
+    errorContent.innerHTML = `
+        <div style="display: flex; align-items: center; padding: 15px 20px;">
+            <img src="images/error_icon.png" alt="Error" style="width: 32px; height: 32px; margin-right: 15px;">
+            <div>
+                <p style="margin:0 0 10px 0;">${corruptedMessage}</p>
+
+                <p style="margin:0;">A manual index rebuild is required.</p>
+                <p style="margin-top: 10px;">Use the 'Run' operation to execute the following script:</p>
+                
+                <b style="margin-top: 5px; display:block; font-family: 'Courier New', monospace;">sys.core\\rebuild.bat</b>
+            </div>
+        </div>
+        <div style="text-align: center; padding-bottom: 15px;">
+            <button class="win95-button" id="error-ok-btn" style="min-width: 75px;">OK</button>
+        </div>
+    `;
+    const errorWindow = openWindow('error-help-corrupted', 'System Error', 'custom', errorContent);
+    if (errorWindow) {
+        errorWindow.querySelector('#error-ok-btn').addEventListener('click', () => {
+            errorWindow.querySelector('.close-button').click();
+        });
+    }
+}
+
+function corruptText(text, intensity = 0.6) {
+    const diacritics = [
+        '\u030d', '\u030e', '\u0304', '\u0305', '\u033f', '\u0311', '\u0306', '\u030a',
+        '\u030b', '\u030c', '\u030f', '\u0312', '\u0313', '\u0314', '\u033d', '\u033e',
+        '\u035e', '\u035f', '\u0360', '\u0361', '\u034a', '\u0316', '\u0317', '\u0318',
+        '\u0319', '\u031c', '\u031d', '\u031e', '\u031f', '\u0320', '\u0324', '\u0325',
+        '\u0326', '\u032e', '\u0330', '\u0331', '\u0332', '\u0333', '\u0339', '\u033a',
+        '\u033b', '\u033c', '\u0345', '\u0347', '\u0348', '\u0349', '\u034d', '\u034e',
+        '\u0353', '\u0354', '\u0355', '\u0356', '\u0359', '\u035a', '\u035b', '\u035c',
+        '\u035d', '\u035e', '\u035f', '\u0360', '\u0361', '\u0362'
+    ];
+    let corrupted = '';
+    for (const char of text) {
+        corrupted += char;
+        for (let i = 0; i < intensity * 5; i++) {
+            if (Math.random() < intensity) {
+                corrupted += diacritics[Math.floor(Math.random() * diacritics.length)];
+            }
+        }
+    }
+    return corrupted;
 }
