@@ -48,8 +48,13 @@ export function startFirewallGame() {
 
     const gameWindow = openWindow('firewall-game', 'Bypass Security Protocol', 'custom', gameWrapper);
     if (!gameWindow) return;
-    gameWindow.style.width = '750px'; // Wider window for terminal layout
-    gameWindow.style.height = '500px';
+
+    // Only set a fixed size on desktop screens
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+        gameWindow.style.width = '750px';
+        gameWindow.style.height = '500px';
+    }
 
     // --- 3. Game State Variables ---
     const mainScreen = gameWindow.querySelector('#terminal-main-screen');

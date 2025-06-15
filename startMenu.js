@@ -211,10 +211,10 @@ function openRunDialog() {
     runWindow.querySelector('#run-ok-btn').addEventListener('click', () => {
         const command = input.value.trim().toLowerCase(); // Make it case-insensitive
         
-        // This is where we check for our secret command
-        if (command === 'sys.core\\rebuild.bat') {
+        //  check for our secret command
+        if (command === 'sys.core/rebuild.bat') {
             runWindow.querySelector('.close-button').click(); // Close the run dialog
-            executeRebuild(); // Trigger the payoff!
+            executeRebuild(); 
         } else {
             alert(`Cannot find the file '${command}'. Please check the filename and try again.`);
         }
@@ -226,9 +226,6 @@ function openRunDialog() {
     });
 }
 
-/**
- * Executes the "System Rebuild" animation and reward.
- */
 function executeRebuild() {
     const rebuildContent = document.createElement('div');
     rebuildContent.style.padding = '20px';

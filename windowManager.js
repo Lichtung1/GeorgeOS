@@ -460,9 +460,9 @@ export function openWindow(id, htmlTitleFallback, contentType, directContent, co
         // NEW: First, check if it's the settings window
         if (id === 'settings-window') {
             windowElement.style.width = '90%';
-            windowElement.style.height = '40%'; // Your desired height
+            windowElement.style.height = '40%'; 
             windowElement.style.left = '5%';
-            windowElement.style.top = '10%';   // Position it near the top
+            windowElement.style.top = '10%';   
 
         } else if (windowElement.classList.contains('explainer-window')) {
             // --- SPECIAL rules for ALL explainer windows on mobile ---
@@ -471,8 +471,39 @@ export function openWindow(id, htmlTitleFallback, contentType, directContent, co
             windowElement.style.left = '10%';
             windowElement.style.top = '15%';
 
+        } else if (id === 'error-help-corrupted') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '30%';
+            windowElement.style.left = '5%';
+            windowElement.style.top = '20%';    
+
+        } 
+        else if (id === 'run-dialog') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '30%'; 
+            windowElement.style.left = '5%';
+            windowElement.style.top = '25%';    
+
+        } else if (id === 'find-terminal-window') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '30%'; 
+            windowElement.style.left = '5%';
+            windowElement.style.top = '25%';    
+
+        } else if (id === 'firewall-game') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '90%'; 
+            windowElement.style.left = '5%';
+            windowElement.style.top = '5%';    
+
+        } else if (id === 'treasure-window') {
+            windowElement.style.width = '90%';
+            windowElement.style.height = '50%'; 
+            windowElement.style.left = '5%';
+            windowElement.style.top = '35%';    
+
         } else {
-            // Fallback for all other windows
+            // Fallback for all other windows 
             windowElement.style.width = '90%';
             windowElement.style.height = '90%';
             windowElement.style.left = '5%';

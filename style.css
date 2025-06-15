@@ -1008,28 +1008,27 @@ li.project-item:hover .project-description {
     }
 
     .terminal-wrapper {
-        flex-direction: column; 
-    }
-
-
-    #terminal-main-screen,
-    .terminal-sidebar {
-        flex-basis: auto;
+        display: flex; /* Keep this */
+        flex-direction: column; /* Keep this */
+        height: 100%; /* Make sure wrapper fills the window body */
     }
 
     #terminal-main-screen {
-        flex-basis: 70%;
-        white-space: pre-wrap;
-        word-break: break-all;
-        overflow-y: auto;
-        color: #00FF00; 
+        width: 100%;        /* Take full width */
+        height: 60%;        /* Take 60% of the vertical space */
+        flex-basis: auto;   /* Reset any desktop width/basis setting */
+        box-sizing: border-box; /* Ensures padding is included in the size */
     }
 
     .terminal-sidebar {
-        height: 40%; 
-        border-left: none;
-        border-top: 2px solid #008f00; 
+        width: 100%;        /* Take full width */
+        height: 40%;        /* Take 40% of the vertical space */
+        flex-basis: auto;   /* Reset any desktop width/basis setting */
+        border-left: none;  /* Remove the side border */
+        border-top: 2px solid #008f00; /* Add a top border as a separator */
+        box-sizing: border-box; /* Ensures padding is included in the size */
     }
+    
 }
 
 #treasure-window .window-body {

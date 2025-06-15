@@ -263,7 +263,7 @@ function showCorruptionError() {
                 <p style="margin:0;">A manual index rebuild is required.</p>
                 <p style="margin-top: 10px;">Use the 'Run' operation to execute the following script:</p>
                 
-                <b style="margin-top: 5px; display:block; font-family: 'Courier New', monospace;">sys.core\\rebuild.bat</b>
+                <b style="margin-top: 5px; display:block; font-family: 'Courier New', monospace;">sys.core/rebuild.bat</b>
             </div>
         </div>
         <div style="text-align: center; padding-bottom: 15px;">
