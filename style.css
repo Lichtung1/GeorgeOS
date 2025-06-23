@@ -343,7 +343,7 @@ body {
     font-weight: bold;
     width: 16px;
     display: inline-block;
-    text-align: center;
+    text-align: left;
 }
 .start-menu li.separator {
     height: 1px;
