@@ -641,10 +641,8 @@ export function openWelcomeWindows() {
     const img = new Image();
     img.src = photoPath;
     img.onload = () => {
-        // Get a fresh reference to the welcome window after it has been placed
         const welcomeWindowEl = document.getElementById(welcomeId);
 
-        // Preload image to get its dimensions for a perfectly sized window
         const padding = 100;
         const maxW = desktop.offsetWidth - padding;
         const maxH = desktop.offsetHeight - padding;
@@ -658,23 +656,39 @@ export function openWelcomeWindows() {
 
         if (imageWindow) {
             const imageWindowWidth = winW + 10;
+            const imageWindowHeight = winH + 40; // Including title bar height
             imageWindow.style.width = imageWindowWidth + 'px';
-            imageWindow.style.height = (winH + 40) + 'px';
+            imageWindow.style.height = imageWindowHeight + 'px';
+
+            const desktopRect = desktop.getBoundingClientRect();
+            const taskbarHeight = 30; // Assuming fixed taskbar height
+            
+            const maxTopAllowed = desktopRect.height - imageWindowHeight - 5; // 5px safety from taskbar
+
+            let finalImageTop;
 
             if (welcomeWindowEl) {
-                // **** CHANGED: Logic to center this window horizontally AND place it below ****
-                const imageLeft = (desktop.offsetWidth - imageWindowWidth) / 2;
-                imageWindow.style.left = Math.max(10, imageLeft) + 'px'; // Center it too
-                imageWindow.style.top = (welcomeWindowEl.offsetTop + welcomeWindowEl.offsetHeight + 10) + 'px'; // 10px gap below
+                const welcomeBottom = welcomeWindowEl.offsetTop + welcomeWindowEl.offsetHeight;
+                let desiredImageTopFromWelcome = welcomeBottom + 10; // 10px gap below welcome window
+
+
+                finalImageTop = Math.min(desiredImageTopFromWelcome, maxTopAllowed);
             } else {
-                // Fallback positioning if the welcome window failed to open
-                const imageLeft = (desktop.offsetWidth - imageWindowWidth) / 2;
-                imageWindow.style.left = Math.max(10, imageLeft) + 'px';
-                imageWindow.style.top = '60px';
+                let centeredTop = (desktopRect.height - imageWindowHeight) / 2;
+                finalImageTop = Math.min(centeredTop, maxTopAllowed);
             }
+            
+            // Ensure the window doesn't go above the top of the screen (min 10px for title bar)
+            finalImageTop = Math.max(10, finalImageTop);
+
+            // Apply the calculated top position
+            imageWindow.style.top = finalImageTop + 'px';
+
+            // Always center horizontally
+            const imageLeft = (desktop.offsetWidth - imageWindowWidth) / 2;
+            imageWindow.style.left = Math.max(10, imageLeft) + 'px'; // Ensure it's not off left edge
         }
 
-        // Finally, ensure the top window (welcome note) has focus by default
         if (welcomeWindowEl) {
             makeWindowActive(welcomeWindowEl);
         }
