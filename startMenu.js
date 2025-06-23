@@ -25,7 +25,7 @@ export function initializeStartMenu(startButton, startMenu) {
 
 
 
-    // --- MERGED AND CORRECTED LOGIC for Start Menu Items ---
+    // ---LOGIC for Start Menu Items ---
     startMenu.querySelectorAll('li').forEach(item => {
         // This correctly skips the parent items for flyout menus
         if (item.classList.contains('has-flyout')) {
@@ -38,12 +38,10 @@ export function initializeStartMenu(startButton, startMenu) {
 
             // This is the complete and correct if/else if chain
             if (action === 'shutdown') {
-                // initiateShutdown(); // Your shutdown logic
+                initiateShutdown(); // Your shutdown logic
             } else if (action === 'run') {
-                // THIS IS THE NEW PART FOR THE RUN COMMAND
                 openRunDialog();
             } else if (action === 'open-window') {
-                // THIS IS THE ORIGINAL PART FOR 'FIND' THAT WE ARE RESTORING
                 openWindow(
                     item.dataset.windowId,
                     item.dataset.windowTitle,
@@ -56,7 +54,7 @@ export function initializeStartMenu(startButton, startMenu) {
             } else if (action === 'find') {
                 openFindTerminal();
             } else if (app) {
-                // THIS IS THE ORIGINAL PART FOR 'SETTINGS', 'HELP', ETC.
+                
                 const iconToClick = document.getElementById(`icon-${app}`);
                 if (iconToClick) {
                     iconToClick.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
