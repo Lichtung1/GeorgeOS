@@ -344,12 +344,40 @@ body.hacker-theme #tray { box-shadow: inset 1px 1px #031, inset -1px -1px var(--
   #start-button { padding: 0 10px; font-size: 14px; }
   .taskbar-button { flex-basis: 40px; justify-content: center; }
   .taskbar-button span { display: none; }
-  #start-menu { left: 0; right: 0; bottom: var(--taskbar-h); max-height: calc(100% - var(--taskbar-h)); overflow-y: auto; }
-  #start-menu > ul { flex: 1; }
-  #start-menu li[role="menuitem"] { flex-wrap: wrap; padding-top: 9px; padding-bottom: 9px; font-size: 14px; }
-  #start-menu .submenu, #start-menu .submenu.flip { position: static; flex-basis: 100%; box-shadow: none; margin: 6px -22px -9px -6px; padding: 0 0 0 16px; max-height: none; background: #d4d4d4; }
-  #start-menu li.open > .submenu { display: block; }
-  #start-menu .submenu li[role="menuitem"] { max-width: none; white-space: normal; font-size: 13px; }
+  /* Start menu on phones: drill-down. Opening a folder hides its siblings and
+     shows its contents in place, with the folder row turned into a "◀ Back" header. */
+  #start-menu { left: 0; right: 0; bottom: var(--taskbar-h); max-height: calc(100% - var(--taskbar-h)); }
+  #start-menu > ul { flex: 1; overflow-y: auto; }
+  .start-banner { font-size: 18px; width: 20px; }
+  #start-menu li[role="menuitem"] { flex-wrap: wrap; min-width: 0; padding: 10px 28px 10px 10px; font-size: 15px; white-space: normal; }
+  #start-menu > ul > li[role="menuitem"] { min-height: 0; }
+  #start-menu > ul > li > img { width: 24px; height: 24px; }
+  #start-menu .submenu li img { width: 20px; height: 20px; }
+  #start-menu .submenu, #start-menu .submenu.flip {
+    position: static; flex-basis: 100%; box-shadow: none; padding: 0; margin: 0;
+    background: transparent;
+  }
+  #start-menu .submenu li[role="menuitem"] { max-width: none; padding: 10px 28px 10px 10px; gap: 10px; }
+  #start-menu .arrow { font-size: 10px; right: 10px; top: 14px; }
+
+  /* only the open branch is visible */
+  #start-menu ul:has(> li.open) > li:not(.open) { display: none; }
+  #start-menu li.open { padding: 0 !important; background: transparent !important; color: #000 !important; }
+  /* the open folder's own row becomes a Back header */
+  #start-menu li.open > img, #start-menu li.open > span:not(.arrow) { padding-top: 10px; padding-bottom: 10px; }
+  #start-menu li.open > img { margin-left: 30px; }
+  #start-menu li.open > span:not(.arrow) { font-weight: bold; flex: 1; }
+  #start-menu li.open > .arrow { right: auto; left: 10px; top: 14px; transform: rotate(180deg); font-size: 12px; }
+  #start-menu li.open > .submenu { border-top: 1px solid #808080; box-shadow: inset 0 1px #fff; }
+  /* nested open folders: show only the deepest header */
+  #start-menu li.open:has(li.open) > img,
+  #start-menu li.open:has(li.open) > span,
+  #start-menu li.open:has(li.open) > .submenu { border: 0; box-shadow: none; }
+  #start-menu li.open:has(li.open) > img,
+  #start-menu li.open:has(li.open) > span { display: none; }
+  #start-menu li[role="menuitem"]:not(.open):active { background: var(--navy); color: #fff; }
+  #start-menu li:hover:not(.open) { background: transparent; color: inherit; }
+  #start-menu li.sep { margin: 2px 8px; }
   .title-bar { padding: 4px 3px 4px 4px; }
   /* bigger tap targets; 98.css positions the glyphs for 16x14 buttons, so re-center them */
   .title-bar-controls button { min-width: 24px; min-height: 22px; background-position: center !important; }
