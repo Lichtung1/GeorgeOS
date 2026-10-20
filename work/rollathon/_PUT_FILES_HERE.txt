@@ -1,0 +1,12 @@
+Bike, Walk, Run or Roll-a-thon
+==============================
+
+Drop this project's media in this folder. It shows up on the project page automatically.
+
+  Pictures:  1.jpg, 2.jpg, 3.jpg ... up to 8.jpg   (.png also works)
+  Videos:    1.mp4, 2.mp4 ... up to 4.mp4
+  YouTube:   youtube.txt  with one YouTube link per line
+
+Numbers set the order. Videos show before pictures.
+Keep pictures under ~2 MB and videos under ~25 MB (GitHub refuses files over 100 MB).
+For anything already on YouTube, use youtube.txt instead of uploading the video.

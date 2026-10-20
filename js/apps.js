@@ -213,20 +213,10 @@ export function openProject(projectId) {
     p.with ? el('tr', {}, el('th', {}, 'With'), el('td', {}, p.with)) : null,
     p.tags ? el('tr', {}, el('th', {}, 'Tools'), el('td', {}, p.tags.join(' · '))) : null);
 
-  const embeds = media.filter(m => m.type === 'youtube' || m.type === 'vimeo').map(m =>
-    el('figure', { class: 'embed' },
-      el('div', { class: 'embed-frame' }, el('iframe', {
-        src: m.type === 'youtube' ? `https://www.youtube-nocookie.com/embed/${m.id}` : `https://player.vimeo.com/video/${m.id}`,
-        title: m.caption || p.title, allow: 'autoplay; fullscreen; picture-in-picture', allowfullscreen: true, loading: 'lazy' })),
-      m.caption ? el('figcaption', {}, m.caption) : null));
+  const embeds = media.filter(m => m.type === 'youtube' || m.type === 'vimeo').map(m => embedFor(m, p.title));
 
-  const gallery = viewable.length ? el('fieldset', {},
-    el('legend', {}, viewable.length > 1 ? `Media (${viewable.length})` : 'Media'),
-    el('div', { class: 'gallery' }, viewable.map((m, i) =>
-      el('button', { class: 'gallery-item', onclick: () => openMedia(viewable, i, p.id), title: m.name },
-        el('img', { src: m.kind === 'video' ? (m.poster || 'icons/video.png') : m.src, alt: m.name, loading: 'lazy' }),
-        m.kind === 'video' ? el('span', { class: 'play-badge' }, '▶') : null,
-        el('span', { class: 'gallery-caption' }, m.name))))) : null;
+  const gallery = el('div', { class: 'project-gallery' });
+  renderGallery(gallery, viewable, p.id);
 
   const actions = [
     p.launch && LAUNCHERS[p.launch] ? el('button', { class: 'default', onclick: () => openLauncher(p.launch) }, `▶ Run ${LAUNCHERS[p.launch].file}`) : null,
@@ -249,6 +239,62 @@ export function openProject(projectId) {
       el('div', { class: 'status-bar-field' }, FOLDERS.find(f => f.id === p.folder)?.name || '')));
 
   openWindow({ id: 'proj-' + p.id, title: p.title, icon: projIcon(p), body, width: 580, height: 520 });
+
+  // Pick up files dropped into work/<project-id>/ (see the README there).
+  discoverWork(p.id).then(({ items, youtube }) => {
+    if (youtube.length) {
+      const firstEmbed = embeds.length ? embeds[embeds.length - 1].nextSibling : meta.nextSibling;
+      youtube.forEach(id => meta.parentNode.insertBefore(embedFor({ type: 'youtube', id }, p.title), firstEmbed));
+    }
+    if (items.length) renderGallery(gallery, [...viewable, ...items], p.id);
+  });
+}
+
+function embedFor(m, title) {
+  return el('figure', { class: 'embed' },
+    el('div', { class: 'embed-frame' }, el('iframe', {
+      src: m.type === 'youtube' ? `https://www.youtube-nocookie.com/embed/${m.id}` : `https://player.vimeo.com/video/${m.id}`,
+      title: m.caption || title, allow: 'autoplay; fullscreen; picture-in-picture', allowfullscreen: true, loading: 'lazy' })),
+    m.caption ? el('figcaption', {}, m.caption) : null);
+}
+
+function renderGallery(container, items, groupId) {
+  container.replaceChildren();
+  if (!items.length) return;
+  container.append(el('fieldset', {},
+    el('legend', {}, items.length > 1 ? `Media (${items.length})` : 'Media'),
+    el('div', { class: 'gallery' }, items.map((m, i) =>
+      el('button', { class: 'gallery-item', onclick: () => openMedia(items, i, groupId), title: m.name },
+        m.kind === 'video' && !m.poster
+          ? el('video', { src: m.src + '#t=1', muted: true, preload: 'metadata', playsinline: true, class: 'gallery-thumb' })
+          : el('img', { src: m.kind === 'video' ? m.poster : m.src, alt: m.name, loading: 'lazy', class: 'gallery-thumb' }),
+        m.kind === 'video' ? el('span', { class: 'play-badge' }, '▶') : null,
+        el('span', { class: 'gallery-caption' }, m.name))))));
+}
+
+/* Drop-in media: work/<id>/1.jpg … 8.jpg (or .png), 1.mp4 … 4.mp4, youtube.txt.
+   We can't list a folder on a static host, so we check for those names. */
+const workCache = new Map();
+function discoverWork(id) {
+  if (workCache.has(id)) return workCache.get(id);
+  const base = `work/${id}/`;
+  const exists = (url) => fetch(url, { method: 'HEAD', cache: 'no-cache' }).then(r => r.ok).catch(() => false);
+  const nums = [1, 2, 3, 4, 5, 6, 7, 8];
+  const checks = [
+    ...nums.flatMap(n => [['jpg', n], ['png', n]]).map(([ext, n]) => exists(`${base}${n}.${ext}`).then(ok => ok && { src: `${base}${n}.${ext}`, kind: 'image', n })),
+    ...[1, 2, 3, 4].map(n => exists(`${base}${n}.mp4`).then(ok => ok && { src: `${base}${n}.mp4`, kind: 'video', n: n - 100 })),
+  ];
+  const youtube = fetch(base + 'youtube.txt', { cache: 'no-cache' })
+    .then(r => r.ok ? r.text() : '')
+    .then(t => [...t.matchAll(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/g)].map(m => m[1]))
+    .catch(() => []);
+  const result = Promise.all([Promise.all(checks), youtube]).then(([found, yt]) => ({
+    items: found.filter(Boolean).sort((a, b) => a.n - b.n)
+      .map(f => ({ src: f.src, kind: f.kind, name: f.src.split('/').pop(), poster: f.kind === 'video' && null })),
+    youtube: yt,
+  }));
+  workCache.set(id, result);
+  return result;
 }
 
 /* ═════════════════════════  LAUNCHERS (live sites in a window)  ═════════════════════════ */

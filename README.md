@@ -15,6 +15,11 @@ Copy an entry and edit it. To add a YouTube video, put this in the project's `me
 
 Images and videos: `{ type: 'image', src: 'art/file.jpg' }` / `{ type: 'video', src: 'art/file.mp4', poster: 'art/file.poster.jpg' }`.
 
+## Easiest: drop files into work/<project>/
+
+Every project has a folder in `work/` (e.g. `work/fixie/`). Name files `1.jpg`…`8.jpg` (or .png), `1.mp4`…`4.mp4`,
+and/or add a `youtube.txt` with YouTube links. They appear on that project's page automatically, with no code changes.
+
 ## Adding media to the Art / Photos folders
 
 Add the file, then add an entry to `js/data/files.js`. Keep files web-sized. These are the commands used for the current media:
@@ -43,6 +48,7 @@ js/data/projects.js    ← all portfolio content
 js/data/content.js     Notepad documents (Welcome, OPERATOR.LOG, Help, notes)
 js/data/files.js       Art & Photos folder contents
 icons/                 pixel icons for file types
+work/<project-id>/      drop-in media for each project (see above)
 docs/George_Dyck_Artist_CV.pdf, George_Dyck_Academic_CV.pdf
 ```
 
