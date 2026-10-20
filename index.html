@@ -1,143 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
-    <title>GEORGE DYCK OS</title>
-    
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>GEORGE DYCK OS</title>
+  <meta name="description" content="George Dyck (V01D R4ST3R): creative technologist, 3D animator and designer in Winnipeg. An interactive portfolio disguised as a 90s desktop.">
+  <meta property="og:title" content="GEORGE DYCK OS">
+  <meta property="og:description" content="Installations, music videos, games, type and posters by George Dyck (V01D R4ST3R).">
+  <meta property="og:image" content="https://www.georgedyck.com/images/ME.png">
+  <meta name="theme-color" content="#008080">
+  <link rel="icon" href="images/MMOS.png">
+  <link rel="stylesheet" href="vendor/98.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/main.js"></script>
 </head>
 <body>
+  <main id="desktop" aria-label="Desktop"></main>
 
-    <div id="desktop"> 
-        <div class="desktop-icon" id="icon-operator-log" 
-        data-window-id="operator-log-window" 
-        data-window-title-key="operatorLog" 
-        data-content-key="operatorLog"> <img src="images/operator_log_icon.png" alt="Operator Log"> 
-            <span>OPERATOR.LOG</span>
-        </div>
-        <div class="desktop-icon" id="icon-help" data-window-id="help-window" data-window-title="Help" data-content-key="helpContent">
-            <img src="images/help_icon.png" alt="Help">
-            <span>Help</span>
-        </div>
-        <div class="desktop-icon" id="icon-mmos"> <img src="images/MMOS.png" alt="Moyamoya OS"> 
-            <span>MMOS.exe</span>
-        </div>
+  <footer id="taskbar">
+    <button id="start-button" aria-haspopup="menu"><img src="images/MMOS.png" alt=""><b>Start</b></button>
+    <div id="taskbar-buttons"></div>
+    <div id="tray"><span id="clock"></span></div>
+  </footer>
 
-        <div class="desktop-icon" id="icon-lichtung"> <img src="images/job.png" alt="Job Simulator"> 
-            <span>text_dissolution.exe</span>
-        </div>
-
-        <div class="desktop-icon" id="icon-art-folder" data-window-id="art-folder-window" 
-            data-window-title="Art" data-content-type="custom-art-list"> <img src="images/folder.png" alt="Art Folder"> 
-            <span>Art</span>
-        </div>
-        <div class="desktop-icon" id="icon-firewall" style="display: none;">
-            <img src="images/firewall_icon.png" alt="Firewall">
-            <span>Firewall.exe</span>
-        </div>
-        <div class="desktop-icon" id="icon-moth"><img src="images/moth.png" alt="Luana Moth"> 
-            <span>Luana_Moth.exe</span>
-        </div>
-        <div class="desktop-icon" id="icon-photos-folder" 
-            data-window-id="photos-folder-window" 
-            data-window-title="Photos" 
-            data-content-type="custom-photo-list"> 
-            <img src="images/folder.png" alt="Photos Folder"> 
-            <span>Photos</span>
-        </div>
-        <div class="desktop-icon" id="icon-settings">
-            <img src="images/settings.png" alt="Settings"> 
-            <span>Settings</span>
-        </div>
-        <div class="desktop-icon" id="icon-cep">
-            <img src="images/brain.png" alt="CEP BBS"> 
-            <span>CEP.BAT</span>
-        </div>
+  <noscript>
+    <div class="window" style="margin:40px auto;max-width:420px">
+      <div class="title-bar"><div class="title-bar-text">GeorgeOS</div></div>
+      <div class="window-body"><p>GeorgeOS needs JavaScript to boot. George Dyck: creative technologist, 3D animator and designer. george.m.dyck@gmail.com</p></div>
     </div>
-
-    <div id="taskbar">
-        <button id="start-button">
-            <strong>Start</strong>
-        </button>
-        <div id="taskbar-buttons-container">
-        </div>
-        <div id="taskbar-clock"></div>
-    </div>
-
-    <div id="start-menu" class="start-menu" style="display: none;">
-        <div class="start-menu-header">
-            <strong>George</strong><span class="ninety-five">OS</span>
-        </div>
-        <ul>
-            <li class="has-flyout">
-                <img src="images/programs_icon.png" class="start-menu-icon">
-                <span><u>P</u>rograms</span>
-                <span class="flyout-arrow">&#9654;</span>
-                <ul class="flyout-menu">
-                    <li data-app="moth"><img src="images/moth.png" class="flyout-icon"> Luana_Moth.exe</li>
-                    <li data-app="mmos"><img src="images/MMOS.png" class="flyout-icon"> MMOS.exe</li>
-                    <li data-app="lichtung"><img src="images/job.png" class="flyout-icon"> text_dissolution.exe</li>
-                    <li data-app="cep"><img src="images/brain.png" class="flyout-icon"> CEP.BAT</li>
-                </ul>
-            </li>
-
-            <li class="has-flyout">
-                <img src="images/documents_icon.png" class="start-menu-icon">
-                <span><u>D</u>ocuments</span>
-                <span class="flyout-arrow">&#9654;</span>
-                <ul class="flyout-menu">
-                    <li data-app="operator-log"><img src="images/operator_log_icon.png" class="flyout-icon"> OPERATOR.LOG</li>
-                    <li data-app="art-folder"><img src="images/folder.png" class="flyout-icon"> Art</li>
-                    <li data-app="photos-folder"><img src="images/folder.png" class="flyout-icon"> Photos</li>
-                </ul>
-            </li>
-
-            <li data-app="settings">
-                <img src="images/settings_icon.png" class="start-menu-icon">
-                <span><u>S</u>ettings</span>
-            </li>
-
-            <li data-action="find"> <img src="images/find_icon.png" class="start-menu-icon">
-                <span><u>F</u>ind</span>
-            </li>
-
-            <li class="separator"></li>
-
-            <li data-app="help">
-                <img src="images/help_icon.png" class="start-menu-icon">
-                <span><u>H</u>elp</span>
-            </li>
-
-            <li data-action="run">
-                <img src="images/run_icon.png" class="start-menu-icon">
-                <span><u>R</u>un...</span>
-            </li>
-
-            <li class="separator"></li>
-
-            <li data-action="shutdown">
-                <img src="images/shutdown_icon.png" class="start-menu-icon">
-                <span>Sh<u>u</u>t Down...</span>
-            </li>
-        </ul>
-    </div>
-
-    <div class="window" id="window-template">
-        <div class="title-bar">
-            <span class="title">Window</span>
-            <div class="title-bar-controls">
-                <button class="minimize-button" aria-label="Minimize">&minus;</button> <button class="close-button" aria-label="Close">&times;</button> 
-            </div>
-        </div>
-        <div class="window-body">
-        </div>
-        <div class="resize-handle"></div> </div>
-
-    <script type="module" src="main.js?v=2"></script>
+  </noscript>
 </body>
 </html>
