@@ -272,14 +272,14 @@ function renderGallery(container, items, groupId) {
         el('span', { class: 'gallery-caption' }, m.name))))));
 }
 
-/* Drop-in media: work/<id>/1.jpg … 8.jpg (or .png), 1.mp4 … 4.mp4, youtube.txt.
+/* Drop-in media: work/<id>/1.jpg … 12.jpg (or .png), 1.mp4 … 4.mp4, youtube.txt.
    We can't list a folder on a static host, so we check for those names. */
 const workCache = new Map();
 function discoverWork(id) {
   if (workCache.has(id)) return workCache.get(id);
   const base = `work/${id}/`;
   const exists = (url) => fetch(url, { method: 'HEAD', cache: 'no-cache' }).then(r => r.ok).catch(() => false);
-  const nums = [1, 2, 3, 4, 5, 6, 7, 8];
+  const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const checks = [
     ...nums.flatMap(n => [['jpg', n], ['png', n]]).map(([ext, n]) => exists(`${base}${n}.${ext}`).then(ok => ok && { src: `${base}${n}.${ext}`, kind: 'image', n })),
     ...[1, 2, 3, 4].map(n => exists(`${base}${n}.mp4`).then(ok => ok && { src: `${base}${n}.mp4`, kind: 'video', n: n - 100 })),
@@ -288,9 +288,16 @@ function discoverWork(id) {
     .then(r => r.ok ? r.text() : '')
     .then(t => [...t.matchAll(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/g)].map(m => m[1]))
     .catch(() => []);
-  const result = Promise.all([Promise.all(checks), youtube]).then(([found, yt]) => ({
-    items: found.filter(Boolean).sort((a, b) => a.n - b.n)
-      .map(f => ({ src: f.src, kind: f.kind, name: f.src.split('/').pop(), poster: f.kind === 'video' && null })),
+  // captions.txt: one line per file, e.g.  1.jpg: Holy Void @ West End Cultural Centre
+  const captions = fetch(base + 'captions.txt', { cache: 'no-cache' })
+    .then(r => r.ok ? r.text() : '')
+    .then(t => Object.fromEntries(t.split(/\r?\n/).map(l => l.match(/^\s*([\w.-]+)\s*[:=]\s*(.+?)\s*$/)).filter(Boolean).map(m => [m[1].toLowerCase(), m[2]])))
+    .catch(() => ({}));
+  const result = Promise.all([Promise.all(checks), youtube, captions]).then(([found, yt, caps]) => ({
+    items: found.filter(Boolean).sort((a, b) => a.n - b.n).map(f => {
+      const file = f.src.split('/').pop();
+      return { src: f.src, kind: f.kind, name: caps[file.toLowerCase()] || file };
+    }),
     youtube: yt,
   }));
   workCache.set(id, result);

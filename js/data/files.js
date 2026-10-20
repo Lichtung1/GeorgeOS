@@ -1,6 +1,8 @@
 // Media in the Art and Photos folders. Add an entry by hand when you add a file:
 // { name, src, kind: "image"|"video", type, size, date, thumb, poster? }
 export const ART_FILES = [
+  {"name": "JUG_golden_boy.jpg", "src": "art/JUG_golden_boy.jpg", "kind": "image", "type": "JPEG Image", "size": "126 KB", "date": "2026", "thumb": "thumbs/JUG_golden_boy.jpg"},
+  {"name": "JUG_2L.jpg", "src": "art/JUG_2L.jpg", "kind": "image", "type": "JPEG Image", "size": "71 KB", "date": "2026", "thumb": "thumbs/JUG_2L.jpg"},
   {
     "name": "PublicDomain.mp4",
     "src": "art/PublicDomain.mp4",

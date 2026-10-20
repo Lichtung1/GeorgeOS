@@ -3,9 +3,10 @@ Gig posters
 
 Drop this project's media in this folder. It shows up on the project page automatically.
 
-  Pictures:  1.jpg, 2.jpg, 3.jpg ... up to 8.jpg   (.png also works)
+  Pictures:  1.jpg, 2.jpg, 3.jpg ... up to 12.jpg   (.png also works)
   Videos:    1.mp4, 2.mp4 ... up to 4.mp4
   YouTube:   youtube.txt  with one YouTube link per line
+  Captions:  captions.txt  with lines like   1.jpg: Poster for the March show
 
 Numbers set the order. Videos show before pictures.
 Keep pictures under ~2 MB and videos under ~25 MB (GitHub refuses files over 100 MB).

@@ -17,7 +17,7 @@ Images and videos: `{ type: 'image', src: 'art/file.jpg' }` / `{ type: 'video', 
 
 ## Easiest: drop files into work/<project>/
 
-Every project has a folder in `work/` (e.g. `work/fixie/`). Name files `1.jpg`…`8.jpg` (or .png), `1.mp4`…`4.mp4`,
+Every project has a folder in `work/` (e.g. `work/fixie/`). Name files `1.jpg`…`12.jpg` (or .png), `1.mp4`…`4.mp4`,
 and/or add a `youtube.txt` with YouTube links. They appear on that project's page automatically, with no code changes.
 
 ## Adding media to the Art / Photos folders

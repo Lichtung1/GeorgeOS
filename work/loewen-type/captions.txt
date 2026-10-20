@@ -1,0 +1,3 @@
+1.png: Specimen
+2.png: Capitals
+3.png: Lower case

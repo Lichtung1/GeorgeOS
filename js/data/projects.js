@@ -45,6 +45,7 @@ export const PROJECTS = [
     body: [
       'A crowd-sourced digital graffiti wall for the Big Sun festival in Winnipeg. Festival-goers scanned a QR code on posters around the venue, painted a tag in a retro “Paint”-style app on their phone, and watched it ignite in neon on a projection above the bar, about two and a half storeys tall (roughly 7.5 m × 13 m).',
       'I designed and coded the full system: the phone painting app, the real-time server, a moderation queue, and the wall itself, and ran it live on the night.',
+      'Below: the phone painting app, styled after Windows 95 Paint.',
     ],
     media: [], links: [],
   },
@@ -55,7 +56,7 @@ export const PROJECTS = [
       'Bîstyek’s paintings of displacement and resilience, brought into augmented reality. The central exhibit at Market Square for Nuit Blanche Winnipeg 2026: viewers scan a QR code and the work appears in their space on any Android or iOS phone, with no app required.',
       'I modelled the figures from his paintings, rigged and weight-painted them, cleaned up the animation (animated by another collaborator), rendered material for a promotional video, and built the web-AR experience. An ongoing collaboration with an artist featured at the Winnipeg Art Gallery (WAG).',
     ],
-    media: [], links: [],
+    media: [], links: [{ label: 'Try the AR experience', url: 'https://imabox-ar.github.io/' }],
   },
   {
     id: 'hocketus', folder: 'installations',
@@ -180,7 +181,7 @@ export const PROJECTS = [
   /* ── TYPE DESIGN ─────────────────────────────────────────── */
   {
     id: 'loewen-type', folder: 'type', icon: 'icons/font.png',
-    title: 'Loewen Guitars typeface', file: 'Loewen.ttf', year: '2025–26', role: 'Type Designer',
+    title: 'Loewen Guitars typeface', file: 'Shay.otf', year: '2025–26', role: 'Type Designer',
     body: [
       'A complete ornamental display typeface, commissioned by luthier Loewen Guitars and translated from historical needlework patterns into a scroll-filled alphabet.',
       'The work treats old stitch charts as an early form of pixel art, carrying a hand-craft grid tradition into digital type.',
@@ -189,10 +190,20 @@ export const PROJECTS = [
   },
   {
     id: 'wolfe-type', folder: 'type', icon: 'icons/font.png',
-    title: 'Dorothy Wolfe typeface', file: 'Wolfe.ttf', year: '2025–26', role: 'Type Designer',
+    title: 'Dorothy Wolfe typeface', file: 'Dorthy_Wolfe.otf', year: '2025–26', role: 'Type Designer',
     body: [
-      'A complete blackletter display typeface for fashion designer Dorothy Wolfe, translated from historical needlework patterns.',
+      'A blackletter display alphabet for fashion designer Dorothy Wolfe, translated from historical needlework patterns into cross-stitch capitals.',
       'The work treats old stitch charts as an early form of pixel art, carrying a hand-craft grid tradition into digital type.',
+    ],
+    media: [], links: [],
+  },
+
+  {
+    id: 'ecco-type', folder: 'type', icon: 'icons/font.png',
+    title: 'ECCO Epilogue typeface (Luana Moth)', file: 'ECCO_Epilogue.otf', year: '2025–26', role: 'Type Designer',
+    body: [
+      'A chunky pixel typeface made for the Luana Moth universe: full upper and lower case, numerals and punctuation, built on a strict grid like the type of an old computer game.',
+      'Used across the Luana Moth ARG and Project Quassia: Invitation.',
     ],
     media: [], links: [],
   },
@@ -207,14 +218,12 @@ export const PROJECTS = [
       '2026 · dr.ift · Sidestage, May 15',
       '2026 · MOYAMOYA, Kandekt · Public Domain, March 21',
       '2026 · Radagast, Desolation Plains, Mutable Body · Public Domain, Jan 17. Presented by Eye and Ear Control Records and Send & Receive; a wireframe knight “summoned from the command line” (Blender, Photoshop)',
-      '2026 · At Last, Detective!, dr.ift, Laughing Court · The Handsome Daughter',
+      '2026 · At Last, Detective!, dr.ift, Laughing Court · The Handsome Daughter, July 25',
       '2026 · Bike, Walk, Run or Roll-a-thon · community fundraiser graphics',
+      '2025 · DEAFWIZRD · Into the Music, July 18 (free, all ages)',
       '2025 · MOYAMOYA, Luana Moth, Justin Bear, DEAFWIZRD · Public Domain, June 20',
     ],
-    media: [
-      { type: 'image', src: 'art/skullposterV4.jpg' },
-      { type: 'image', src: 'art/TextPoster_v7.jpg' },
-    ],
+    media: [],
     links: [],
   },
   {
